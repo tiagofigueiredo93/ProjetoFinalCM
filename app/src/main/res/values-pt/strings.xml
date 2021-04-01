@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Projeto Final</string>
+    <string name="welcome">Bem-vindo à app</string>
+    <string name="username">Utilizador</string>
+    <string name="login">Entrar</string>
+    <string name="password">Palavra-passe</string>
+    <string name="myNotes">As minhas Notas</string>
+    <string name="searchYourNotes">Procura as tuas notas</string>
+
+</resources>
