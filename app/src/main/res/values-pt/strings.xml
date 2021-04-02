@@ -7,5 +7,8 @@
     <string name="password">Palavra-passe</string>
     <string name="myNotes">As minhas Notas</string>
     <string name="searchYourNotes">Procura as tuas notas</string>
+    <string name="notes_title">Título da nota</string>
+    <string name="notes_description">Descrição da nota</string>
+    <string name="note_text">Insere o texto da nota</string>
 
 </resources>

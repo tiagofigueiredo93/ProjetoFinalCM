@@ -5,8 +5,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.TextView
-import ipvc.estg.projetofinal.dataClasses.Notes
 
 class MainActivity : AppCompatActivity() {
 
@@ -56,9 +54,6 @@ class MainActivity : AppCompatActivity() {
 
     fun openActivityCreateNotes(view: View) {
         val intent = Intent(this, CreateNote::class.java).apply {
-
-
-
 
         }
         startActivity(intent)

@@ -6,10 +6,14 @@ import android.os.Bundle
 
 import android.view.View
 import android.widget.EditText
-import ipvc.estg.projetofinal.dataClasses.Notes
+import android.widget.TextView
+import android.widget.Toast
+import ipvc.estg.projetofinal.entities.Notes
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
-    const val PARAM1_TITLE = "title"
-    const val PARAM2_DESCRIPTION = "description"
+
 class CreateNote : AppCompatActivity() {
 
     private lateinit var myNotes: ArrayList<Notes>
@@ -18,20 +22,33 @@ class CreateNote : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_note)
 
+        val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
+        val currentDate = sdf.format(Date())
+
+
+        findViewById<TextView>(R.id.dateTime).text = currentDate
+
+
+
     }
 
     fun saveNote(view: View) {
+        val insertTitle = findViewById<EditText>(R.id.insertTite)
+        val insertDescription = findViewById<EditText>(R.id.insertDescription)
+        val insertText = findViewById<EditText>(R.id.insertText)
 
-        myNotes = ArrayList<Notes>()
-
-        val intent = Intent(this, MainActivity::class.java).apply {
-            val titleInsert = findViewById<EditText>(R.id.insertTite)
-            val descriptionInsert = findViewById<EditText>(R.id.insertDescription)
-
-            putExtra(PARAM1_TITLE, titleInsert.text.toString())
-            putExtra(PARAM2_DESCRIPTION, descriptionInsert.text.toString())
+        if (insertTitle.text.isNullOrEmpty()){
+            Toast.makeText(this, "Title is Required", Toast.LENGTH_SHORT).show()
         }
-        startActivity(intent)
+        if (insertDescription.text.isNullOrEmpty()){
+            Toast.makeText(this, "Description is Required", Toast.LENGTH_SHORT).show()
+        }
+
+        if (insertText.text.isNullOrEmpty()){
+            Toast.makeText(this, "Insert note text is Required", Toast.LENGTH_SHORT).show()
+
+        }
 
     }
+
 }

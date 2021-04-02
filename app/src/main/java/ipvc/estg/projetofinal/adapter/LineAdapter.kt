@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ipvc.estg.projetofinal.R
-import ipvc.estg.projetofinal.dataClasses.Notes
+import ipvc.estg.projetofinal.entities.Notes
 
 class LineAdapter(val list: ArrayList<Notes>):RecyclerView.Adapter<LineViewHolder>() {
 
