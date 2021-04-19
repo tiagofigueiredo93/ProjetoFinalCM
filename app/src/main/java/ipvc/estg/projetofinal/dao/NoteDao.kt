@@ -6,12 +6,14 @@ import ipvc.estg.projetofinal.entities.Notes
 
 @Dao
 interface NoteDao {
-    @get:Query("SELECT * FROM notes ORDER BY id DESC")
-    val allNotes: LiveData<List<Notes>>
+    @Query("SELECT * FROM notes_table ORDER BY id DESC")
+    fun getAlphabetizedNotes(): LiveData<List<Notes>>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertNotes(note:Notes)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insert(note:Notes)
 
+    @Query ("DELETE FROM notes_table")
+    suspend fun deleteAll()
     @Delete
     fun deleteNote(note: Notes)
 

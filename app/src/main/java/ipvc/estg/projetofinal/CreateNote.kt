@@ -1,54 +1,49 @@
 package ipvc.estg.projetofinal
 
+import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.TextUtils
 
-import android.view.View
+import android.widget.Button
 import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
-import ipvc.estg.projetofinal.entities.Notes
-import java.text.SimpleDateFormat
-import java.util.*
 import kotlin.collections.ArrayList
 
 
 class CreateNote : AppCompatActivity() {
 
-    private lateinit var myNotes: ArrayList<Notes>
-
+    private lateinit var editTitleView: EditText
+    private lateinit var editTitleView2: EditText
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_note)
 
-        val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
-        val currentDate = sdf.format(Date())
+        editTitleView = findViewById(R.id.insertTite)
+        editTitleView2 = findViewById(R.id.insertDescription)
 
+        val button = findViewById<Button>(R.id.saveNote)
+        button.setOnClickListener {
+            val replyIntent = Intent()
 
-        findViewById<TextView>(R.id.dateTime).text = currentDate
+            if (TextUtils.isEmpty(editTitleView.text)) {
+                setResult(Activity.RESULT_CANCELED, replyIntent)
+            }else if(TextUtils.isEmpty(editTitleView2.text)){
+                setResult(Activity.RESULT_CANCELED, replyIntent)
+            }
 
-
-
+            else {
+                val title = editTitleView.text.toString()
+                val description = editTitleView2.text.toString()
+                replyIntent.putExtra(EXTRA_REPLY_TITLE, title)
+                replyIntent.putExtra(EXTRA_REPLY_DESCRIPTION,description)
+                setResult(Activity.RESULT_OK, replyIntent)
+            }
+            finish()
+        }
     }
-
-    fun saveNote(view: View) {
-        val insertTitle = findViewById<EditText>(R.id.insertTite)
-        val insertDescription = findViewById<EditText>(R.id.insertDescription)
-        val insertText = findViewById<EditText>(R.id.insertText)
-
-        if (insertTitle.text.isNullOrEmpty()){
-            Toast.makeText(this, "Title is Required", Toast.LENGTH_SHORT).show()
-        }
-        if (insertDescription.text.isNullOrEmpty()){
-            Toast.makeText(this, "Description is Required", Toast.LENGTH_SHORT).show()
-        }
-
-        if (insertText.text.isNullOrEmpty()){
-            Toast.makeText(this, "Insert note text is Required", Toast.LENGTH_SHORT).show()
-
-        }
-
+    companion object{
+        const val EXTRA_REPLY_TITLE = "com.example.android.title"
+        const val EXTRA_REPLY_DESCRIPTION = "com.example.android.description"
     }
-
 }
