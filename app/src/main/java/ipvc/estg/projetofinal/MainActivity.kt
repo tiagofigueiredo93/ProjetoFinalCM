@@ -81,19 +81,22 @@ class MainActivity : AppCompatActivity() {
 //    }
 
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu, menu)
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater: MenuInflater = menuInflater
+        inflater.inflate(R.menu.menu, menu)
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
-            R.id.apagarNotas -> Toast.makeText(this,"Apagar notas", Toast.LENGTH_LONG).show()
+        // Handle item selection
+        return when (item.itemId) {
+           R.id.apagarNotas -> {
+                noteViewModel.deleteAll()
+               Toast.makeText(this,"Apagar notas", Toast.LENGTH_SHORT).show()
 
-
-
+          true
+           }
+            else -> super.onOptionsItemSelected(item)
         }
-        return super.onOptionsItemSelected(item)
     }
-
 }
