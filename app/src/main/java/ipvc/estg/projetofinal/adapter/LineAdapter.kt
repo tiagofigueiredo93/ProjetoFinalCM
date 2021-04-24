@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextClock
 import android.widget.TextView
 
 import androidx.recyclerview.widget.RecyclerView
@@ -23,6 +24,7 @@ class LineAdapter internal constructor(
     class NoteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val noteTitleView: TextView = itemView.findViewById(R.id.titleNotes)
         val noteDescription: TextView = itemView.findViewById(R.id.descriptionNotes)
+        val dateView: TextView = itemView.findViewById(R.id.dateTime)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
@@ -34,6 +36,8 @@ class LineAdapter internal constructor(
         val current = notes[position]
         holder.noteTitleView.text = "Title: "+current.title
         holder.noteDescription.text = "Description: "+current.description
+        holder.dateView.text = "Date: "+current.dateTime.toString()
+
 
     }
 

@@ -9,7 +9,7 @@ import ipvc.estg.projetofinal.entities.Notes
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@Database(entities = [Notes::class], version = 6, exportSchema = false)
+@Database(entities = [Notes::class], version = 7, exportSchema = false)
 abstract class NotesDatabase : RoomDatabase() {
 
     abstract fun noteDao(): NoteDao
@@ -23,7 +23,7 @@ abstract class NotesDatabase : RoomDatabase() {
                 scope.launch {
                     var noteDao = database.noteDao()
 
-                    noteDao.deleteAll()
+                    //noteDao.deleteAll()
                     /*var note = Notes(1, "Nota 1","","","")
                     noteDao.insert(note)
 
