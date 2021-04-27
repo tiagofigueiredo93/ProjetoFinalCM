@@ -91,24 +91,26 @@ class MainActivity : AppCompatActivity(), CellClickListener {
         }
 
 
-        //APAGAR NOTAS
-        // EDITAR E APAGAR NOTA
+
+        //EDITAR E APAGAR NOTA
         if (requestCode == newNotasActivityRequestCode2 && resultCode == Activity.RESULT_OK) {
-
-
+            var id = data?.getStringExtra(Edit_notas.ID_EDIT)
+            var edit_titulo = data?.getStringExtra(Edit_notas.EDIT_TITLE).toString()
+            var edit_observacao = data?.getStringExtra(Edit_notas.EDIT_DESCRIPTION).toString()
             var id_delete = data?.getStringExtra(Edit_notas.DELETE_ID)
               if(data?.getStringExtra(Edit_notas.STATUS) == "DELETE"){
                 noteViewModel.delete(id_delete?.toIntOrNull())
 
-            }
-            //notasViewModel.update(id?.toIntOrNull(), edit_titulo, edit_observacao)
-            //notasViewModel.delete(id_delete?.toIntOrNull())
-            //Toast.makeText(this, "Nota editada!", Toast.LENGTH_LONG).show()
+            }else if(data?.getStringExtra(Edit_notas.STATUS) == "EDIT"){
+                  noteViewModel.update(id?.toIntOrNull(), edit_titulo, edit_observacao)
+                  Toast.makeText(this, "Nota editada!", Toast.LENGTH_SHORT).show()
+              }
+
         } else if (resultCode == Activity.RESULT_CANCELED) {
             if(data?.getStringExtra(Edit_notas.STATUS) == "EDIT"){
-                Toast.makeText(this, "erro", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Nota não editada, campos vazios!", Toast.LENGTH_SHORT).show()
             } else if(data?.getStringExtra(Edit_notas.STATUS) == "DELETE"){
-                Toast.makeText(this, "erro", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Nota não editada, campos vazios!", Toast.LENGTH_SHORT).show()
             }
         }
     }

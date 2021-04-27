@@ -44,6 +44,27 @@ class Edit_notas : AppCompatActivity() {
 
             finish()
         }
+
+        val button = findViewById<Button>(R.id.edit_button)
+        button.setOnClickListener {
+            val replyIntent = Intent()
+            replyIntent.putExtra(ID_EDIT, id)
+            if (TextUtils.isEmpty(editTituloView.text)  || TextUtils.isEmpty(editDescriptionView.text)) {
+                setResult(Activity.RESULT_CANCELED, replyIntent)
+            } else {
+                val edit_titulo = editTituloView.text.toString()
+                replyIntent.putExtra(EDIT_TITLE, edit_titulo)
+
+                val edit_description = editDescriptionView.text.toString()
+                replyIntent.putExtra(EDIT_DESCRIPTION, edit_description)
+                replyIntent.putExtra(STATUS, "EDIT")
+                setResult(Activity.RESULT_OK, replyIntent)
+            }
+
+
+            finish()
+        }
+
         val buttonBack = findViewById<ImageView>(R.id.img_back)
 
         buttonBack.setOnClickListener {
@@ -52,8 +73,13 @@ class Edit_notas : AppCompatActivity() {
         }
     }
     companion object {
+        const val EDIT_TITLE = "TITLE_EDIT"
+        const val EDIT_DESCRIPTION = "DESCRIPTION_EDIT"
+        const val ID_EDIT = "ID_EDIT"
         const val STATUS = ""
         const val DELETE_ID = "DELETE_ID"
+
+
 
     }
 }
