@@ -7,23 +7,26 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import ipvc.estg.projetofinal.CreateNote.Companion.EXTRA_REPLY_TEXT
 import ipvc.estg.projetofinal.adapter.LineAdapter
 import ipvc.estg.projetofinal.entities.Notes
 import ipvc.estg.projetofinal.viewModel.NoteViewModel
-import java.text.SimpleDateFormat
 import java.util.*
-
-class MainActivity : AppCompatActivity() {
+const val PARAM_ID: String = "id"
+const val PARAM1_TITULO: String = "titulo"
+const val PARAM2_DESCRICAO: String = "descricao"
+const val PARAM3_TEXT: String = "text"
+class MainActivity : AppCompatActivity(), CellClickListener {
 
     private lateinit var noteViewModel : NoteViewModel
     private val newWordActivityRequestCode = 1
+    private val newNotasActivityRequestCode2 = 2
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +34,7 @@ class MainActivity : AppCompatActivity() {
         Log.d("***TAG", "onCreate")
 
         val recyclerLine = findViewById<RecyclerView>(R.id.recyclerView_Notes)
-        val adapter = LineAdapter(this)
+        val adapter = LineAdapter(this, this)
         recyclerLine.adapter = adapter
         recyclerLine.layoutManager = LinearLayoutManager(this)
 
@@ -51,30 +54,31 @@ class MainActivity : AppCompatActivity() {
             startActivityForResult(intent, newWordActivityRequestCode)
         }
 
-
-
-
-
     }
 
 
-
+    override fun onCellClickListener(data: Notes) {
+        val intent = Intent(this@MainActivity, Edit_notas::class.java)
+        intent.putExtra(PARAM_ID, data.id.toString())
+        intent.putExtra(PARAM1_TITULO, data.title.toString())
+        intent.putExtra(PARAM2_DESCRICAO, data.description.toString())
+        intent.putExtra(EXTRA_REPLY_TEXT, data.noteText.toString())
+        startActivityForResult(intent, newNotasActivityRequestCode2)
+        Log.e("***ID", data.id.toString())
+        Log.e("***Text", data.noteText.toString())
+    }
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-
-
-
+        //Adicionar Notas
         if (requestCode == newWordActivityRequestCode && resultCode == Activity.RESULT_OK) {
-//            data?.getStringExtra(CreateNote.EXTRA_REPLY)?.let {
-//                val note = Notes(title=it, description = "", noteText = "", dateTime = "")
-//                noteViewModel.insert(note)
+
             val ptitle = data?.getStringExtra(CreateNote.EXTRA_REPLY_TITLE)
             val pdescription = data?.getStringExtra(CreateNote.EXTRA_REPLY_DESCRIPTION)
             val pdate = data?.getStringExtra(CreateNote.EXTRA_REPLY_DATE)
-
+            val ptext = data?.getStringExtra(CreateNote.EXTRA_REPLY_TEXT)
 
             if (ptitle !=null && pdescription != null){
                 val note = Notes(title = ptitle, description = pdescription, dateTime = pdate, noteText = "")
@@ -85,16 +89,32 @@ class MainActivity : AppCompatActivity() {
         }else{
             Toast.makeText(applicationContext, "Nota não inserida",Toast.LENGTH_SHORT).show()
         }
+
+
+        //APAGAR NOTAS
+        // EDITAR E APAGAR NOTA
+        if (requestCode == newNotasActivityRequestCode2 && resultCode == Activity.RESULT_OK) {
+
+
+            var id_delete = data?.getStringExtra(Edit_notas.DELETE_ID)
+              if(data?.getStringExtra(Edit_notas.STATUS) == "DELETE"){
+                noteViewModel.delete(id_delete?.toIntOrNull())
+
+            }
+            //notasViewModel.update(id?.toIntOrNull(), edit_titulo, edit_observacao)
+            //notasViewModel.delete(id_delete?.toIntOrNull())
+            //Toast.makeText(this, "Nota editada!", Toast.LENGTH_LONG).show()
+        } else if (resultCode == Activity.RESULT_CANCELED) {
+            if(data?.getStringExtra(Edit_notas.STATUS) == "EDIT"){
+                Toast.makeText(this, "erro", Toast.LENGTH_SHORT).show()
+            } else if(data?.getStringExtra(Edit_notas.STATUS) == "DELETE"){
+                Toast.makeText(this, "erro", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
 
 
-//    fun openActivityCreateNotes(view: View) {
-//        val intent = Intent(this, CreateNote::class.java).apply {
-//
-//        }
-//        startActivity(intent)
-//    }
 
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -116,8 +136,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun deleteLine(view: View) {
 
-        //noteViewModel.deleteAll()
-    }
+
+
 }

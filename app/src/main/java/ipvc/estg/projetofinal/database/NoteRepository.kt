@@ -3,6 +3,7 @@ package ipvc.estg.projetofinal.database
 import androidx.lifecycle.LiveData
 import ipvc.estg.projetofinal.dao.NoteDao
 import ipvc.estg.projetofinal.entities.Notes
+import java.util.concurrent.Flow
 
 class NoteRepository(private val noteDao: NoteDao) {
 
@@ -17,7 +18,12 @@ class NoteRepository(private val noteDao: NoteDao) {
         noteDao.deleteAll()
     }
 
-    suspend fun deleteNote(note: Notes){
-        noteDao.deleteNote(note)
+    suspend fun update(id: Int?, titulo: String, descricao: String){
+        noteDao.update(id, titulo, descricao)
     }
+
+    suspend fun delete(id: Int?){
+        noteDao.delete(id)
+    }
+
 }

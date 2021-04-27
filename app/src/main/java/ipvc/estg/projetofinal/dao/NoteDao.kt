@@ -3,6 +3,7 @@ package ipvc.estg.projetofinal.dao
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import ipvc.estg.projetofinal.entities.Notes
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface NoteDao {
@@ -15,7 +16,11 @@ interface NoteDao {
     @Query("DELETE FROM notes_table")
     suspend fun deleteAll()
 
-    @Delete
-    fun deleteNote(note: Notes)
+    @Query("DELETE FROM notes_table WHERE id = :id")
+    suspend fun delete(id: Int?)
+
+    @Query("UPDATE notes_table SET title = :titulo, description = :descricao WHERE id = :id")
+    suspend fun update(id: Int?, titulo: String, descricao: String)
+
 
 }
