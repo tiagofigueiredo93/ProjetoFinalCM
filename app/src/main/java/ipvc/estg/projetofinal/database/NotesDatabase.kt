@@ -9,7 +9,7 @@ import ipvc.estg.projetofinal.entities.Notes
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@Database(entities = [Notes::class], version = 7, exportSchema = false)
+@Database(entities = [Notes::class], version = 8, exportSchema = false)
 abstract class NotesDatabase : RoomDatabase() {
 
     abstract fun noteDao(): NoteDao

@@ -23,6 +23,7 @@ class CreateNote : AppCompatActivity() {
     private lateinit var editTitleView: EditText
     private lateinit var editTitleView2: EditText
     private lateinit var editTitleView3: TextView
+    private lateinit var editTitleView4: EditText
     var currentData:String? = null
 
 
@@ -34,6 +35,7 @@ class CreateNote : AppCompatActivity() {
         editTitleView = findViewById(R.id.insertTite)
         editTitleView2 = findViewById(R.id.insertDescription)
         editTitleView3 = findViewById(R.id.tvDateTime)
+        editTitleView4 = findViewById(R.id.insertText)
 
         val data = SimpleDateFormat("dd/MM/yy HH:mm")
         currentData = data.format(Date())
@@ -55,11 +57,12 @@ class CreateNote : AppCompatActivity() {
                 val title = editTitleView.text.toString()
                 val description = editTitleView2.text.toString()
                 val dateTime = editTitleView3.text.toString()
-
+                val note_text = editTitleView4.text.toString()
 
                 replyIntent.putExtra(EXTRA_REPLY_TITLE, title)
                 replyIntent.putExtra(EXTRA_REPLY_DESCRIPTION,description)
                 replyIntent.putExtra(EXTRA_REPLY_DATE,dateTime)
+                replyIntent.putExtra(EXTRA_REPLY_TEXT,note_text)
                 setResult(Activity.RESULT_OK, replyIntent)
             }
             finish()
@@ -78,6 +81,7 @@ class CreateNote : AppCompatActivity() {
         const val EXTRA_REPLY_TITLE = "com.example.android.title"
         const val EXTRA_REPLY_DESCRIPTION = "com.example.android.description"
         const val EXTRA_REPLY_DATE = "com.example.android.dateTime"
+        const val EXTRA_REPLY_TEXT = "com.example.android.text"
     }
 
 
