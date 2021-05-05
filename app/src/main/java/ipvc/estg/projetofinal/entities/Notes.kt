@@ -14,7 +14,7 @@ import java.io.Serializable
 
     @ColumnInfo(name = "description") val description: String,
 
-    @ColumnInfo(name = "note_text") val noteText: String,
+    @ColumnInfo(name = "text") val text: String,
 
     @ColumnInfo(name = "date_time") val dateTime:String? = null
 

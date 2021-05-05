@@ -11,7 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class NoteViewModel(application: Application) : AndroidViewModel(application) {
-
+    //ViewModel -> repository
     private val repository: NoteRepository
 
 
@@ -30,8 +30,8 @@ class NoteViewModel(application: Application) : AndroidViewModel(application) {
         repository.deleteAll()
     }
 
-    fun update(id: Int?, titulo: String, descricao: String) = viewModelScope.launch{
-        repository.update(id, titulo, descricao)
+    fun update(id: Int?, titulo: String, descricao: String, noteText: String) = viewModelScope.launch{
+        repository.update(id, titulo, descricao, noteText)
     }
 
     fun delete(id: Int?) = viewModelScope.launch{

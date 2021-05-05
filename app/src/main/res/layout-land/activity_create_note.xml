@@ -4,31 +4,148 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CreateNote">
+    tools:context=".CreateNote"
+    android:background="@color/background">
+
+    <ImageView
+        android:id="@+id/img_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_10sdp"
+        android:src="@drawable/ic_back"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:tint="@color/white"
+        />
+
+    <ImageView
+        android:id="@+id/img_check"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_10sdp"
+        android:src="@drawable/ic_check"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:tint="@color/white" />
+
 
     <EditText
         android:id="@+id/insertTite"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:ems="10"
-        android:hint="Insere um título"
+        android:padding="@dimen/_10sdp"
+        android:layout_margin="@dimen/_10sdp"
         android:inputType="text"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/img_back"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:hint="@string/notes_title"
+        android:textColorHint="@color/grey"
+        android:backgroundTint="@color/grey"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:textSize="@dimen/_15ssp"
+        android:textStyle="bold"
+        android:maxLength="50"
+        android:textColor="@color/white"
+        />
 
-    <EditText
-        android:id="@+id/insertDescription"
+    <TextView
+        android:id="@+id/tvDateTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/insertTite"
-        android:ems="10"
-        android:hint="Insere uma descrição"
-        android:inputType="text"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_5sdp"
+        android:paddingLeft="@dimen/_10sdp"
+        android:maxLines="1"
+        android:textColor="@color/grey"
+        android:textColorHint="@color/grey"
+        android:textSize="@dimen/_8ssp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/insertTite" />
 
-        app:layout_constraintStart_toStartOf="parent" />
+    <TextView
+        android:id="@+id/dateTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/_10sdp"
+        android:paddingEnd="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginStart="@dimen/_5sdp"
+        android:layout_marginEnd="@dimen/_5sdp"
+        android:layout_marginBottom="@dimen/_5sdp"
+        app:layout_constraintTop_toBottomOf="@+id/insertTite"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textColorHint="@color/grey"
+        android:backgroundTint="@color/grey"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:textSize="@dimen/_8ssp"
+        android:maxLength="50"
+        android:textColor="@color/white"
+        />
+
+
+
+    <LinearLayout
+        android:id="@+id/layout_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_10sdp"
+        app:layout_constraintTop_toBottomOf="@+id/dateTime"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:orientation="horizontal">
+
+        <View
+            android:layout_width="@dimen/_5sdp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:background="@color/white"
+            android:layout_marginLeft="@dimen/_5sdp" />
+        />
+        <EditText
+            android:id="@+id/insertDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_10sdp"
+            android:layout_margin="@dimen/_10sdp"
+            android:inputType="text"
+            android:hint="@string/notes_description"
+            android:textColorHint="@color/grey"
+            android:backgroundTint="@color/grey"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textSize="@dimen/_12ssp"
+            android:maxLength="100"
+            android:textColor="@color/white"
+            />
+    </LinearLayout>
+
+
+    <EditText
+        android:id="@+id/insertText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/_10sdp"
+        android:layout_margin="@dimen/_10sdp"
+        android:inputType="textImeMultiLine"
+        app:layout_constraintTop_toBottomOf="@+id/layout_description"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:hint="@string/note_text"
+        android:textColorHint="@color/grey"
+        android:backgroundTint="@color/grey"
+        android:textSize="@dimen/_12ssp"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+
+        />
+
 
     <Button
         android:id="@+id/saveNote"
@@ -44,5 +161,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        android:onClick="saveNote"/>
+        android:backgroundTint="@color/white"
+        android:textColor="@color/black"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>

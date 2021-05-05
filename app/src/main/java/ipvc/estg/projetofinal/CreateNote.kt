@@ -24,6 +24,7 @@ class CreateNote : AppCompatActivity() {
     private lateinit var editTitleView2: EditText
     private lateinit var editTitleView3: TextView
     private lateinit var editTitleView4: EditText
+
     var currentData:String? = null
 
 
@@ -46,9 +47,12 @@ class CreateNote : AppCompatActivity() {
         button.setOnClickListener {
             val replyIntent = Intent()
 
+            //verificar se os campos estão vazios
             if (TextUtils.isEmpty(editTitleView.text)) {
                 setResult(Activity.RESULT_CANCELED, replyIntent)
             }else if(TextUtils.isEmpty(editTitleView2.text)){
+                setResult(Activity.RESULT_CANCELED, replyIntent)
+            } else if(TextUtils.isEmpty(editTitleView4.text)){
                 setResult(Activity.RESULT_CANCELED, replyIntent)
             }
 
@@ -57,12 +61,12 @@ class CreateNote : AppCompatActivity() {
                 val title = editTitleView.text.toString()
                 val description = editTitleView2.text.toString()
                 val dateTime = editTitleView3.text.toString()
-                val note_text = editTitleView4.text.toString()
+                val text = editTitleView4.text.toString()
 
                 replyIntent.putExtra(EXTRA_REPLY_TITLE, title)
                 replyIntent.putExtra(EXTRA_REPLY_DESCRIPTION,description)
                 replyIntent.putExtra(EXTRA_REPLY_DATE,dateTime)
-                replyIntent.putExtra(EXTRA_REPLY_TEXT,note_text)
+                replyIntent.putExtra(EXTRA_REPLY_TEXT,text)
                 setResult(Activity.RESULT_OK, replyIntent)
             }
             finish()
