@@ -7,6 +7,9 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.View
+import android.widget.EditText
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -21,12 +24,15 @@ import java.util.*
 const val PARAM_ID: String = "id"
 const val PARAM1_TITULO: String = "titulo"
 const val PARAM2_DESCRICAO: String = "descricao"
-const val PARAM3_TEXT: String = "text"
+const val PARAM3_TEXT: String="text"
+
 class MainActivity : AppCompatActivity(), CellClickListener {
 
     private lateinit var noteViewModel : NoteViewModel
     private val newWordActivityRequestCode = 1
     private val newNotasActivityRequestCode2 = 2
+    private val backActivity = 1;
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +51,8 @@ class MainActivity : AppCompatActivity(), CellClickListener {
         })
 
 
+
+
         //Criar uma nota local
         val fab = findViewById<FloatingActionButton>(R.id.fab)
         fab.setOnClickListener {
@@ -53,41 +61,48 @@ class MainActivity : AppCompatActivity(), CellClickListener {
 
             startActivityForResult(intent, newWordActivityRequestCode)
         }
+//Back na app
+
+
+
 
     }
 
 
+
+//LineAdapter
     override fun onCellClickListener(data: Notes) {
         val intent = Intent(this@MainActivity, Edit_notas::class.java)
         intent.putExtra(PARAM_ID, data.id.toString())
         intent.putExtra(PARAM1_TITULO, data.title.toString())
         intent.putExtra(PARAM2_DESCRICAO, data.description.toString())
-        intent.putExtra(EXTRA_REPLY_TEXT, data.noteText.toString())
+        intent.putExtra(PARAM3_TEXT, data.text.toString())
+
         startActivityForResult(intent, newNotasActivityRequestCode2)
-        Log.e("***ID", data.id.toString())
-        Log.e("***Text", data.noteText.toString())
+//        Log.e("***ID", data.id.toString())
+//        Log.e("***Text", data.noteText.toString())
     }
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        //Adicionar Notas
+        //ADICIONAR NOTA
         if (requestCode == newWordActivityRequestCode && resultCode == Activity.RESULT_OK) {
 
-            val ptitle = data?.getStringExtra(CreateNote.EXTRA_REPLY_TITLE)
-            val pdescription = data?.getStringExtra(CreateNote.EXTRA_REPLY_DESCRIPTION)
+            val ptitle = data?.getStringExtra(CreateNote.EXTRA_REPLY_TITLE).toString()
+            val pdescription = data?.getStringExtra(CreateNote.EXTRA_REPLY_DESCRIPTION).toString()
             val pdate = data?.getStringExtra(CreateNote.EXTRA_REPLY_DATE)
-            val ptext = data?.getStringExtra(CreateNote.EXTRA_REPLY_TEXT)
+            val pText = data?.getStringExtra(CreateNote.EXTRA_REPLY_TEXT).toString()
 
-            if (ptitle !=null && pdescription != null){
-                val note = Notes(title = ptitle, description = pdescription, dateTime = pdate, noteText = "")
 
+                val note = Notes(title = ptitle, description = pdescription, dateTime = pdate, text = pText)
                 noteViewModel.insert(note)
-            }
+                Toast.makeText(this, "Nota inserida com sucesso.", Toast.LENGTH_SHORT).show()
 
-        }else{
-            Toast.makeText(applicationContext, "Nota não inserida",Toast.LENGTH_SHORT).show()
+
+        }else if(resultCode == Activity.RESULT_CANCELED){
+            Toast.makeText(applicationContext, "Nota não inserida, campos vazios.",Toast.LENGTH_SHORT).show()
         }
 
 
@@ -96,21 +111,30 @@ class MainActivity : AppCompatActivity(), CellClickListener {
         if (requestCode == newNotasActivityRequestCode2 && resultCode == Activity.RESULT_OK) {
             var id = data?.getStringExtra(Edit_notas.ID_EDIT)
             var edit_titulo = data?.getStringExtra(Edit_notas.EDIT_TITLE).toString()
-            var edit_observacao = data?.getStringExtra(Edit_notas.EDIT_DESCRIPTION).toString()
+            var edit_description = data?.getStringExtra(Edit_notas.EDIT_DESCRIPTION).toString()
+
+            var text = data?.getStringExtra(Edit_notas.TEXT_EDIT).toString()
             var id_delete = data?.getStringExtra(Edit_notas.DELETE_ID)
+
+
+
               if(data?.getStringExtra(Edit_notas.STATUS) == "DELETE"){
+                  //apagar nota
                 noteViewModel.delete(id_delete?.toIntOrNull())
+                  Toast.makeText(this, "Nota apagada com sucesso.", Toast.LENGTH_SHORT).show()
 
             }else if(data?.getStringExtra(Edit_notas.STATUS) == "EDIT"){
-                  noteViewModel.update(id?.toIntOrNull(), edit_titulo, edit_observacao)
-                  Toast.makeText(this, "Nota editada!", Toast.LENGTH_SHORT).show()
+
+                //EDIÇÃO DA NOTA
+                  noteViewModel.update(id?.toIntOrNull(), edit_titulo, edit_description,text)
+                  Toast.makeText(this, "Nota editada com sucesso.", Toast.LENGTH_SHORT).show()
               }
 
         } else if (resultCode == Activity.RESULT_CANCELED) {
             if(data?.getStringExtra(Edit_notas.STATUS) == "EDIT"){
-                Toast.makeText(this, "Nota não editada, campos vazios!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Campos vazios.", Toast.LENGTH_SHORT).show()
             } else if(data?.getStringExtra(Edit_notas.STATUS) == "DELETE"){
-                Toast.makeText(this, "Nota não editada, campos vazios!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Campos vazios.", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -126,11 +150,11 @@ class MainActivity : AppCompatActivity(), CellClickListener {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle item selection
+       //APAGAR TODAS AS NOTAS
         return when (item.itemId) {
            R.id.apagarNotas -> {
                 noteViewModel.deleteAll()
-               Toast.makeText(this,"Notas apagadas.", Toast.LENGTH_SHORT).show()
+               Toast.makeText(this,"Notas apagadas com sucesso.", Toast.LENGTH_SHORT).show()
 
           true
            }
@@ -138,7 +162,10 @@ class MainActivity : AppCompatActivity(), CellClickListener {
         }
     }
 
-
+   /* fun back(view: View) {
+        val intent = Intent(this@MainActivity, MenuActivity::class.java)
+        startActivity(intent)
+    }*/
 
 
 }

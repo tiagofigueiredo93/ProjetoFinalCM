@@ -6,7 +6,7 @@ import ipvc.estg.projetofinal.entities.Notes
 import java.util.concurrent.Flow
 
 class NoteRepository(private val noteDao: NoteDao) {
-
+    //repository -> Dao
     val allNotes: LiveData<List<Notes>> = noteDao.getAlphabetizedNotes()
 
     suspend fun insert(note: Notes){
@@ -18,8 +18,8 @@ class NoteRepository(private val noteDao: NoteDao) {
         noteDao.deleteAll()
     }
 
-    suspend fun update(id: Int?, titulo: String, descricao: String){
-        noteDao.update(id, titulo, descricao)
+    suspend fun update(id: Int?, titulo: String, descricao: String, text: String ){
+        noteDao.update(id, titulo, descricao, text)
     }
 
     suspend fun delete(id: Int?){

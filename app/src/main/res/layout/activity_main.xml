@@ -8,17 +8,20 @@
     tools:context=".MainActivity"
     >
 
+
     <TextView
         android:id="@+id/textTitle1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
         android:paddingStart="@dimen/_10sdp"
         android:paddingLeft="@dimen/_10sdp"
         android:paddingTop="@dimen/_10sdp"
         android:text="@string/myNotes"
         android:textColor="@color/white"
         android:textSize="@dimen/_15ssp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.SearchView
@@ -49,39 +52,7 @@
 
         />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:padding="@dimen/_10sdp"
-        android:orientation="horizontal"
-        android:id="@+id/layoutBottom"
-       >
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_check"
-            app:tint="@color/white" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_image"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:layout_marginEnd="@dimen/_10sdp"
-            app:tint="@color/white" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_link"
-
-            app:tint="@color/white" />
-
-    </LinearLayout>
+    
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
