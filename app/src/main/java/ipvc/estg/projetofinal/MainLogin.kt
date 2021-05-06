@@ -41,10 +41,10 @@ class MainLogin : AppCompatActivity() {
         //inicialização da variavel shared_preferences e colocamos em modo privado
         shared_preferences = getSharedPreferences("shared_preferences", Context.MODE_PRIVATE)
         //começar o "check" a false
-        check = shared_preferences.getBoolean("remeber", false)
+        check = shared_preferences.getBoolean(REMEMBER, false)
 
 
-        //verificação
+        //verificação checkbox ativa
         if(check){
             val intent = Intent(this@MainLogin, MenuActivity::class.java)
             startActivity(intent);

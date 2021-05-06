@@ -40,6 +40,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             override fun onResponse(call: Call<List<Report>>, response: Response<List<Report>>){
                 if (response.isSuccessful){
                     reports = response.body()!!
+                    //Para cada report vai buscar a latlng e adiciona o Marker
                     for (report in reports){
                         position = LatLng(report.latitude.toDouble(), report.longitude.toDouble())
                         mMap.addMarker(MarkerOptions().position(position).title(report.tipo + "-" + report.descricao))
