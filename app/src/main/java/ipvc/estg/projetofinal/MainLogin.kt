@@ -64,7 +64,6 @@ class MainLogin : AppCompatActivity() {
 
         //Passar o username e password que o utilizador inserir
         val call = request.login(username = username, password = password)
-
         call.enqueue(object : Callback<OutputLogin> {
 
             override fun onResponse(call: Call<OutputLogin>, response: Response<OutputLogin>){

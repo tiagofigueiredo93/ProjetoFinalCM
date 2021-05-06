@@ -1,18 +1,27 @@
 package ipvc.estg.projetofinal
 
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 
+import android.os.Bundle
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import ipvc.estg.projetofinal.api.EndPoints
+import ipvc.estg.projetofinal.api.Report
+import ipvc.estg.projetofinal.api.ServiceBuilder
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
+    private lateinit var  reports: List<Report>
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,6 +30,27 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
                 .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+        //Obtenção de uma instância do retrofit
+        val request = ServiceBuilder.buildService(EndPoints::class.java)
+        val call = request.getReports()
+        var position: LatLng
+
+        call.enqueue(object : Callback<List<Report>> {
+            override fun onResponse(call: Call<List<Report>>, response: Response<List<Report>>){
+                if (response.isSuccessful){
+                    reports = response.body()!!
+                    for (report in reports){
+                        position = LatLng(report.latitude.toDouble(), report.longitude.toDouble())
+                        mMap.addMarker(MarkerOptions().position(position).title(report.tipo + "-" + report.descricao))
+                    }
+                }
+            }
+            override fun onFailure(call: Call<List<Report>>, t: Throwable){
+                Toast.makeText(this@MapsActivity,"${t.message}", Toast.LENGTH_LONG).show()
+            }
+        })
+
     }
 
     /**
