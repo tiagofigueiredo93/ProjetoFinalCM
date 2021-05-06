@@ -7,6 +7,9 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.View
+import android.widget.EditText
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -28,6 +31,8 @@ class MainActivity : AppCompatActivity(), CellClickListener {
     private lateinit var noteViewModel : NoteViewModel
     private val newWordActivityRequestCode = 1
     private val newNotasActivityRequestCode2 = 2
+    private val backActivity = 1;
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +51,8 @@ class MainActivity : AppCompatActivity(), CellClickListener {
         })
 
 
+
+
         //Criar uma nota local
         val fab = findViewById<FloatingActionButton>(R.id.fab)
         fab.setOnClickListener {
@@ -54,8 +61,14 @@ class MainActivity : AppCompatActivity(), CellClickListener {
 
             startActivityForResult(intent, newWordActivityRequestCode)
         }
+//Back na app
+
+
+
 
     }
+
+
 
 //LineAdapter
     override fun onCellClickListener(data: Notes) {
@@ -149,7 +162,10 @@ class MainActivity : AppCompatActivity(), CellClickListener {
         }
     }
 
-
+   /* fun back(view: View) {
+        val intent = Intent(this@MainActivity, MenuActivity::class.java)
+        startActivity(intent)
+    }*/
 
 
 }
