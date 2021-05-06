@@ -8,18 +8,29 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.TextView
+import ipvc.estg.projetofinal.MainLogin.Companion.USERNAME
 
 class MenuActivity : AppCompatActivity() {
 
     private val newWordActivityRequestCode = 1;
     private val newWordActivityRequestCode2 = 2;
+    private val newWordActivityRequestCode3  = 3;
+
     private lateinit var shared_preferences: SharedPreferences
+
+    private lateinit var textUtilizador: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_menu)
         shared_preferences = getSharedPreferences("shared_preferences", Context.MODE_PRIVATE)
 
 
+        //Nome do utilizador no menu
+        val username = shared_preferences.getString(USERNAME,"")
+        textUtilizador = findViewById(R.id.textUsername)
+        textUtilizador.text = "$username"
 
         //Abrir notas pessoais
         val notasPessoais = findViewById<Button>(R.id.notasPessoais)
@@ -27,12 +38,19 @@ class MenuActivity : AppCompatActivity() {
             val intent = Intent(this@MenuActivity, MainActivity::class.java)
             startActivityForResult(intent, newWordActivityRequestCode)
         }
+
+        //Abrir Mapa
         val reportsMap = findViewById<Button>(R.id.reportsMap)
         reportsMap.setOnClickListener {
             val intent = Intent(this@MenuActivity, MapsActivity::class.java)
             startActivityForResult(intent, newWordActivityRequestCode2)
         }
 
+        val reportsList = findViewById<Button>(R.id.reportsList)
+        reportsList.setOnClickListener {
+            val intent = Intent(this@MenuActivity, AllReports::class.java)
+            startActivityForResult(intent, newWordActivityRequestCode3)
+        }
     }
 
     fun logout(view: View) {
