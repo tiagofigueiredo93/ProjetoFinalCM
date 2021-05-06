@@ -23,5 +23,7 @@
     <string name="notas_pessoais">Notas Pessoais</string>
     <string name="reports_map">Reports Map</string>
     <string name="logout">Logout</string>
+    <string name="all_reports">All reports</string>
+    <string name="bem_vindo">Bem-Vindo</string>
 
 </resources>
