@@ -12,6 +12,7 @@ import android.widget.ImageView
 class MenuActivity : AppCompatActivity() {
 
     private val newWordActivityRequestCode = 1;
+    private val newWordActivityRequestCode2 = 2;
     private lateinit var shared_preferences: SharedPreferences
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,11 +20,17 @@ class MenuActivity : AppCompatActivity() {
         shared_preferences = getSharedPreferences("shared_preferences", Context.MODE_PRIVATE)
 
 
+
         //Abrir notas pessoais
         val notasPessoais = findViewById<Button>(R.id.notasPessoais)
         notasPessoais.setOnClickListener {
             val intent = Intent(this@MenuActivity, MainActivity::class.java)
             startActivityForResult(intent, newWordActivityRequestCode)
+        }
+        val reportsMap = findViewById<Button>(R.id.reportsMap)
+        reportsMap.setOnClickListener {
+            val intent = Intent(this@MenuActivity, MapsActivity::class.java)
+            startActivityForResult(intent, newWordActivityRequestCode2)
         }
 
     }
@@ -37,4 +44,6 @@ class MenuActivity : AppCompatActivity() {
         startActivity(intent)
         finish()
     }
+
+
 }

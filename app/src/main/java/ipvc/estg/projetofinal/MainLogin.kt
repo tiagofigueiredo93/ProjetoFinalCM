@@ -69,6 +69,8 @@ class MainLogin : AppCompatActivity() {
 
             override fun onResponse(call: Call<OutputLogin>, response: Response<OutputLogin>){
                 if (response.isSuccessful){
+
+                    //output do json
                     val c: OutputLogin = response.body()!!
                     if(TextUtils.isEmpty(editUsernameView.text) || TextUtils.isEmpty(editPasswordView.text)) {
                         Toast.makeText(this@MainLogin, "Campos vazios, insira login válido!", Toast.LENGTH_LONG).show()
