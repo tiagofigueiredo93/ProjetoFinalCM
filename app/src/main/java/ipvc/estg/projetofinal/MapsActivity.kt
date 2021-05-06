@@ -40,6 +40,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             override fun onResponse(call: Call<List<Report>>, response: Response<List<Report>>){
                 if (response.isSuccessful){
                     reports = response.body()!!
+                    //Para cada report vai buscar a latlng e adiciona o Marker
                     for (report in reports){
                         position = LatLng(report.latitude.toDouble(), report.longitude.toDouble())
                         mMap.addMarker(MarkerOptions().position(position).title(report.tipo + "-" + report.descricao))
@@ -65,7 +66,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
-        // Add a marker in Sydney and move the camera
+        // Add a marker in Viana
         val viana = LatLng(41.6932, -8.83287)
         mMap.addMarker(MarkerOptions().position(viana).title("Marker in Viana do Castelo"))
         mMap.moveCamera(CameraUpdateFactory.newLatLng(viana))
