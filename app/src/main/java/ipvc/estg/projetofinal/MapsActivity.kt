@@ -65,7 +65,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
-        // Add a marker in Sydney and move the camera
+        // Add a marker in Viana
         val viana = LatLng(41.6932, -8.83287)
         mMap.addMarker(MarkerOptions().position(viana).title("Marker in Viana do Castelo"))
         mMap.moveCamera(CameraUpdateFactory.newLatLng(viana))
