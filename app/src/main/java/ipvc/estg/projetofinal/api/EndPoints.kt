@@ -17,5 +17,5 @@ interface EndPoints {
     @FormUrlEncoded
     @POST("myslim/api/login")
     fun login(@Field("username") username: String?, @Field("password") password: String?): Call<OutputLogin>
-
+    //username e password vai no corpo do pedido
 }
