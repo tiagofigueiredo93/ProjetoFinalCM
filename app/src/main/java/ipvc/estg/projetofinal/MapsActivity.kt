@@ -37,6 +37,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         var position: LatLng
 
         //Inicializar brach desenvolvimento
+        //Teste
 
         call.enqueue(object : Callback<List<Report>> {
             override fun onResponse(call: Call<List<Report>>, response: Response<List<Report>>){
