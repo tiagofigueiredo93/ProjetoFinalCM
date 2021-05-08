@@ -1,9 +1,14 @@
 package ipvc.estg.projetofinal
 
 
+import android.content.pm.PackageManager
+import android.location.Location
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -22,6 +27,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
     private lateinit var  reports: List<Report>
 
+    //variaveis para a localização atual
+    private lateinit var lastLocation: Location //Variavel que nos permite ter a,localização
+
+    //variavel para o cliente FusedLocationProviderClient para aceder á biblioteca
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+
+    //Constante utilizada na verificação se existe permissão para aceder á localização atual
+    private val LOCATION_PERMISSION_REQUEST_CODE = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,13 +44,16 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
+        //Inicialização do fuselLocation biblioteca
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
         //Obtenção de uma instância do retrofit
         val request = ServiceBuilder.buildService(EndPoints::class.java)
         val call = request.getReports()
         var position: LatLng
 
-        //Inicializar brach desenvolvimento
-        //Teste
+
 
         call.enqueue(object : Callback<List<Report>> {
             override fun onResponse(call: Call<List<Report>>, response: Response<List<Report>>){
@@ -70,8 +86,41 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap = googleMap
 
         // Add a marker in Viana
-        val viana = LatLng(41.6932, -8.83287)
-        mMap.addMarker(MarkerOptions().position(viana).title("Marker in Viana do Castelo"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(viana))
+//        val viana = LatLng(41.6932, -8.83287)
+//        mMap.addMarker(MarkerOptions().position(viana).title("Marker in Viana do Castelo"))
+//        mMap.moveCamera(CameraUpdateFactory.newLatLng(viana))
+
+        setUpMap()
+    }
+
+    private fun setUpMap() {
+        //Verifica se existe permissão para aceder á localiozação atual
+        if(ActivityCompat.checkSelfPermission(this,
+                android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+
+                    //Se o utilizador não deu permissão vai larçar uma mensagem para o utilizador dar permissão
+            ActivityCompat.requestPermissions(this,
+                arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST_CODE)
+
+            return
+            //Caso haja permissão vai entrar aqui
+        } else {
+            //Inserção de um simbolo com a nossa localização atual no mapa
+            mMap.isMyLocationEnabled = true
+
+            //Listener sobre a ultima localização
+            fusedLocationClient.lastLocation.addOnSuccessListener(this) { location ->
+                //3
+                if (location != null) {
+                    lastLocation = location
+                    Toast.makeText(this@MapsActivity, lastLocation.toString(), Toast.LENGTH_SHORT).show()
+
+                    //Guardar a latitude e longitude da localização atual
+                    val currentLatLng = LatLng(location.latitude, location.longitude)
+                    //animação da camera para a localização atual
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 12f))
+                }
+            }
+        }
     }
 }
