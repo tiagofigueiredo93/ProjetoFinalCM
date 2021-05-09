@@ -5,10 +5,12 @@ import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+
 import ipvc.estg.projetofinal.MainLogin.Companion.USERNAME
 
 class MenuActivity : AppCompatActivity() {
@@ -16,9 +18,8 @@ class MenuActivity : AppCompatActivity() {
     private val newWordActivityRequestCode = 1;
     private val newWordActivityRequestCode2 = 2;
     private val newWordActivityRequestCode3  = 3;
-
+    private val newWordActivityRequestCode4  = 4;
     private lateinit var shared_preferences: SharedPreferences
-
     private lateinit var textUtilizador: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,10 +30,17 @@ class MenuActivity : AppCompatActivity() {
 
         //Nome do utilizador no menu
         val username = shared_preferences.getString(USERNAME,"")
+        val id = shared_preferences.getInt("id",0)
         textUtilizador = findViewById(R.id.textUsername)
-        textUtilizador.text = "$username"
+        textUtilizador.text = "$username"+"$id"
 
-        //Abrir notas pessoais
+        //Criar
+        val criar = findViewById<Button>(R.id.createReportMenu)
+        criar.setOnClickListener {
+            val intent = Intent(this@MenuActivity, CreateReport::class.java)
+            startActivityForResult(intent, newWordActivityRequestCode4)
+        }
+            //Abrir notas pessoais
         val notasPessoais = findViewById<Button>(R.id.notasPessoais)
         notasPessoais.setOnClickListener {
             val intent = Intent(this@MenuActivity, MainActivity::class.java)

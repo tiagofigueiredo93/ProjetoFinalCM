@@ -24,6 +24,10 @@
     <string name="reports_map">Reports Map</string>
     <string name="logout">Logout</string>
     <string name="all_reports">All reports</string>
-    <string name="bem_vindo">Bem-Vindo</string>
+    <string name="bem_vindo">Bem-vindo</string>
+    <string name="type">Type</string>
+    <string name="description">Description</string>
+    <string name="save_report">Save report</string>
+    <string name="title_activity_create_report">CreateReport</string>
 
 </resources>

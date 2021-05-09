@@ -1,7 +1,9 @@
 package ipvc.estg.projetofinal
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,6 +20,7 @@ class AllReports : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_all_reports)
 
+        //Obtenção de uma instância do retrofit
         val request = ServiceBuilder.buildService(EndPoints::class.java)
         val call = request.getReports()
         var recyclerView = findViewById<RecyclerView>(R.id.reportsRecycler)
@@ -37,4 +40,6 @@ class AllReports : AppCompatActivity() {
             }
         })
     }
+
+
 }

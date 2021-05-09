@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:orientation="vertical"
+    tools:context=".CreateReport"
+    android:padding="@dimen/_10sdp">
+
+
+
+
+        <EditText
+            android:id="@+id/insertType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/grey"
+
+            android:hint="@string/type"
+            android:textColor="@color/white"
+            android:textColorHint="@color/grey"
+            android:textSize="@dimen/_15ssp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/insertDescriptionReport"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/grey"
+            android:hint="@string/description"
+            android:textColor="@color/white"
+            android:textColorHint="@color/grey"
+            android:textSize="@dimen/_12ssp" />
+    <EditText
+        android:id="@+id/imagemReport"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/grey"
+        android:fontFamily="sans-serif-light"
+        android:hint="imagem"
+        android:inputType="textAutoComplete"
+
+        android:textSize="18sp"
+        android:textColor="@color/white"
+        android:textColorHint="@color/grey"/>
+
+
+
+    <Button
+        android:id="@+id/saveReport"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/white"
+        android:text="@string/save_report"
+        android:textColor="@color/black"
+        android:onClick="reportar"
+        />
+
+
+
+</LinearLayout>
