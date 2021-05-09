@@ -1,6 +1,8 @@
 package ipvc.estg.projetofinal
 
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
@@ -13,6 +15,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import ipvc.estg.projetofinal.api.EndPoints
@@ -36,6 +39,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     //Constante utilizada na verificação se existe permissão para aceder á localização atual
     private val LOCATION_PERMISSION_REQUEST_CODE = 1
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maps)
@@ -54,13 +58,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         var position: LatLng
 
 
-
         call.enqueue(object : Callback<List<Report>> {
             override fun onResponse(call: Call<List<Report>>, response: Response<List<Report>>){
                 if (response.isSuccessful){
                     reports = response.body()!!
                     //Para cada report vai buscar a latlng e adiciona o Marker
                     for (report in reports){
+
                         position = LatLng(report.latitude.toDouble(), report.longitude.toDouble())
                         mMap.addMarker(MarkerOptions().position(position).title(report.tipo + "-" + report.descricao))
                     }

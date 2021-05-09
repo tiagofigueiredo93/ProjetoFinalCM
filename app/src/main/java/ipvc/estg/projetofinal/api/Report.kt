@@ -8,4 +8,5 @@ data class Report (
     val descricao: String,
     val imagem: String,
     val utilizador_id: Int
-        )
+    )
+

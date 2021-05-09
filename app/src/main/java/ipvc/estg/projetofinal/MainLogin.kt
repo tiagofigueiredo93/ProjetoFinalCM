@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.CheckBox
@@ -75,17 +76,20 @@ class MainLogin : AppCompatActivity() {
                         Toast.makeText(this@MainLogin, "Campos vazios, insira login válido!", Toast.LENGTH_LONG).show()
                     }else{
                         if(c.status =="false"){
-                            Toast.makeText(this@MainLogin, "Credenciais inválidas!", Toast.LENGTH_LONG).show()
+                            Toast.makeText(this@MainLogin, c.Mensagem, Toast.LENGTH_LONG).show()
                         }else{
 
                             //shared_preferences.edit()
                             val shared_preferences_edit : SharedPreferences.Editor = shared_preferences.edit()
                             shared_preferences_edit.putString(USERNAME, username)
                             shared_preferences_edit.putString(PASSWORD, password)
+                            shared_preferences_edit.putInt(ID_UITLIZADOR, c.id)
                             shared_preferences_edit.putBoolean(REMEMBER, checked_remember)
-
                             //Guardar os campos nas preferencias com o apply
                             shared_preferences_edit.apply()
+
+
+
 
                             val intent = Intent(this@MainLogin, MenuActivity::class.java)
                             startActivity(intent)
@@ -104,6 +108,7 @@ class MainLogin : AppCompatActivity() {
         const val USERNAME = "username"
         const val PASSWORD = "pasword"
         const val REMEMBER = "remember"
+        const val ID_UITLIZADOR = "id"
 
     }
 
