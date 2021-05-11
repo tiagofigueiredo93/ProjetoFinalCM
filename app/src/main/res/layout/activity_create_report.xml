@@ -33,18 +33,7 @@
             android:textColor="@color/white"
             android:textColorHint="@color/grey"
             android:textSize="@dimen/_12ssp" />
-    <EditText
-        android:id="@+id/imagemReport"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/grey"
-        android:fontFamily="sans-serif-light"
-        android:hint="imagem"
-        android:inputType="textAutoComplete"
 
-        android:textSize="18sp"
-        android:textColor="@color/white"
-        android:textColorHint="@color/grey"/>
 
 
 

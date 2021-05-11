@@ -32,6 +32,7 @@ class AllReports : AppCompatActivity() {
                         setHasFixedSize(true)
                         layoutManager = LinearLayoutManager(this@AllReports)
                         adapter = ReportLineAdapter(response.body()!!)
+
                     }
                 }
             }

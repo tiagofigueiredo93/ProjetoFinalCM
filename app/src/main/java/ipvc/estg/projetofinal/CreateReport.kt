@@ -8,12 +8,13 @@ import android.location.Location
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.*
-
+import ipvc.estg.projetofinal.MainLogin.Companion.PREFERENCES
 
 
 import ipvc.estg.projetofinal.api.EndPoints
@@ -25,13 +26,12 @@ import retrofit2.Response
 
 class CreateReport : AppCompatActivity() {
 
+
     private lateinit var editTipoView: EditText
     private lateinit var editDescricaoView: EditText
-    private lateinit var editImagemView: EditText
-    private lateinit var shared_preferences: SharedPreferences
+    lateinit var shared_preferences: SharedPreferences
     private var latitude : Double = 0.0
     private var longitude : Double = 0.0
-
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private val LOCATION_PERMISSION_REQUEST_CODE = 1
     private lateinit var locationRequest: LocationRequest
@@ -44,8 +44,8 @@ class CreateReport : AppCompatActivity() {
 
         editTipoView = findViewById(R.id.insertType)
         editDescricaoView = findViewById(R.id.insertDescriptionReport)
-        editImagemView = findViewById(R.id.imagemReport)
-        shared_preferences = getSharedPreferences("shared_preferences", Context.MODE_PRIVATE)
+
+        shared_preferences = getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         locationCallback = object : LocationCallback() {
@@ -74,24 +74,26 @@ class CreateReport : AppCompatActivity() {
         val longitude = longitude
         val tipo = editTipoView.text.toString()
         val descricao = editDescricaoView.text.toString()
-        val imagem = editImagemView.text.toString()
-        val utilizador_id = shared_preferences.getInt("id", 0)
+
+        val utilizador_id = shared_preferences.getInt(MainLogin.ID_UITLIZADOR, 0)
 
 
         val call = request.report(
-                latitude = latitude.toString(),
-                longitude = longitude.toString(),
-                tipo = tipo,
-                descricao = descricao,
-                imagem = imagem,
-                utilizador_id = 1
+            latitude = latitude.toString(),
+            longitude = longitude.toString(),
+            tipo = tipo,
+            descricao = descricao,
+            imagem = "imagem",
+            utilizador_id = utilizador_id
         )
+
 
         call.enqueue(object : Callback<OutPutReport> {
             override fun onResponse(call: Call<OutPutReport>, response: Response<OutPutReport>){
                 if (response.isSuccessful){
                     val c: OutPutReport = response.body()!!
                     Toast.makeText(this@CreateReport, c.Mensagem, Toast.LENGTH_LONG).show()
+
                     val intent = Intent(this@CreateReport, MapsActivity::class.java)
                     startActivity(intent);
                     finish()
@@ -104,6 +106,7 @@ class CreateReport : AppCompatActivity() {
             }
         })
     }
+
 
     override fun onPause() {
         super.onPause()
@@ -127,5 +130,6 @@ class CreateReport : AppCompatActivity() {
         fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null)
 
     }
+
 
 }
