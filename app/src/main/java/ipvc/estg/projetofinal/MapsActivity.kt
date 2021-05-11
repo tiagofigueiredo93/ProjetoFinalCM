@@ -39,6 +39,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     //Constante utilizada na verificação se existe permissão para aceder á localização atual
     private val LOCATION_PERMISSION_REQUEST_CODE = 1
 
+    //Declaração do shared_preferences
+    private lateinit var shared_preferences: SharedPreferences
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,14 +52,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mapFragment.getMapAsync(this)
 
         //Inicialização do fuselLocation biblioteca
-
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        shared_preferences = getSharedPreferences("shared_preferences", Context.MODE_PRIVATE)
 
         //Obtenção de uma instância do retrofit
         val request = ServiceBuilder.buildService(EndPoints::class.java)
         val call = request.getReports()
         var position: LatLng
-
+        val utilizador_id = shared_preferences.getInt("id", 0)
 
         call.enqueue(object : Callback<List<Report>> {
             override fun onResponse(call: Call<List<Report>>, response: Response<List<Report>>){
@@ -64,9 +67,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     reports = response.body()!!
                     //Para cada report vai buscar a latlng e adiciona o Marker
                     for (report in reports){
-
+                        //Guardar a latitude e longitude do report
                         position = LatLng(report.latitude.toDouble(), report.longitude.toDouble())
-                        mMap.addMarker(MarkerOptions().position(position).title(report.tipo + "-" + report.descricao))
+                        if(report.utilizador_id == utilizador_id){
+                            mMap.addMarker(MarkerOptions().position(position).title(report.id.toString()).snippet(report.tipo + "-" + report.descricao))
+                                .setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                        }else{
+                            mMap.addMarker(MarkerOptions().position(position).title(report.id.toString()).snippet(report.tipo + "-" + report.descricao))
+                        }
+
                     }
                 }
             }

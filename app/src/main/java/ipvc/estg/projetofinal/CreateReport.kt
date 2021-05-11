@@ -14,7 +14,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.*
-import ipvc.estg.projetofinal.MainLogin.Companion.PREFERENCES
+
 
 
 import ipvc.estg.projetofinal.api.EndPoints
@@ -45,7 +45,7 @@ class CreateReport : AppCompatActivity() {
         editTipoView = findViewById(R.id.insertType)
         editDescricaoView = findViewById(R.id.insertDescriptionReport)
 
-        shared_preferences = getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE)
+        shared_preferences = getSharedPreferences( "shared_preferences", Context.MODE_PRIVATE)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         locationCallback = object : LocationCallback() {

@@ -40,7 +40,7 @@ class MainLogin : AppCompatActivity() {
         checkboxRemeber = findViewById(R.id.checkBox_Remeber)
 
         //inicialização da variavel shared_preferences e colocamos em modo privado
-        shared_preferences = getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE)
+        shared_preferences = getSharedPreferences("shared_preferences", Context.MODE_PRIVATE)
         //começar o "check" a false
         check = shared_preferences.getBoolean(REMEMBER, false)
 
@@ -72,7 +72,7 @@ class MainLogin : AppCompatActivity() {
                             val shared_preferences_edit : SharedPreferences.Editor = shared_preferences.edit()
                             shared_preferences_edit.putString(USERNAME, username)
                             shared_preferences_edit.putString(PASSWORD, password)
-                            shared_preferences_edit.putInt(ID_UITLIZADOR, c.id)
+                            shared_preferences_edit.putInt("id", c.id)
                             shared_preferences_edit.putBoolean(REMEMBER, checked_remember)
                             shared_preferences_edit.apply()
 
@@ -91,7 +91,7 @@ class MainLogin : AppCompatActivity() {
 
 
     companion object{
-        const val PREFERENCES = "shared_preferences"
+
         const val USERNAME = "username"
         const val PASSWORD = "pasword"
         const val REMEMBER = "remember"
