@@ -28,7 +28,7 @@ class MainLogin : AppCompatActivity() {
     private lateinit var editUsernameView: EditText
     private lateinit var editPasswordView: EditText
     private lateinit var checkboxRemeber: CheckBox
-    private lateinit var shared_preferences: SharedPreferences
+    lateinit var shared_preferences: SharedPreferences
     private var check = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,7 +40,7 @@ class MainLogin : AppCompatActivity() {
         checkboxRemeber = findViewById(R.id.checkBox_Remeber)
 
         //inicialização da variavel shared_preferences e colocamos em modo privado
-        shared_preferences = getSharedPreferences("shared_preferences", Context.MODE_PRIVATE)
+        shared_preferences = getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE)
         //começar o "check" a false
         check = shared_preferences.getBoolean(REMEMBER, false)
 
@@ -52,44 +52,29 @@ class MainLogin : AppCompatActivity() {
             finish()
         }
     }
-
-    //Botão login
-    fun login(view: View){
-
-        //Obtenção de uma instância do retrofit
+    fun login(view: View) {
         val request = ServiceBuilder.buildService(EndPoints::class.java)
-        //Buscar os parametros inseridos nos EditTexts
         val username = editUsernameView.text.toString()
         val password = editPasswordView.text.toString()
         val checked_remember: Boolean = checkboxRemeber.isChecked
-
-        //Passar o username e password que o utilizador inserir
         val call = request.login(username = username, password = password)
-        call.enqueue(object : Callback<OutputLogin> {
 
+        call.enqueue(object : Callback<OutputLogin> {
             override fun onResponse(call: Call<OutputLogin>, response: Response<OutputLogin>){
                 if (response.isSuccessful){
-
-                    //output do json
                     val c: OutputLogin = response.body()!!
                     if(TextUtils.isEmpty(editUsernameView.text) || TextUtils.isEmpty(editPasswordView.text)) {
-                        Toast.makeText(this@MainLogin, "Campos vazios, insira login válido!", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this@MainLogin, "R.string.tiago", Toast.LENGTH_LONG).show()
                     }else{
                         if(c.status =="false"){
-                            Toast.makeText(this@MainLogin, c.Mensagem, Toast.LENGTH_LONG).show()
+                            Toast.makeText(this@MainLogin, c.msg, Toast.LENGTH_LONG).show()
                         }else{
-
-                            //shared_preferences.edit()
                             val shared_preferences_edit : SharedPreferences.Editor = shared_preferences.edit()
                             shared_preferences_edit.putString(USERNAME, username)
                             shared_preferences_edit.putString(PASSWORD, password)
                             shared_preferences_edit.putInt(ID_UITLIZADOR, c.id)
                             shared_preferences_edit.putBoolean(REMEMBER, checked_remember)
-                            //Guardar os campos nas preferencias com o apply
                             shared_preferences_edit.apply()
-
-
-
 
                             val intent = Intent(this@MainLogin, MenuActivity::class.java)
                             startActivity(intent)
@@ -104,7 +89,9 @@ class MainLogin : AppCompatActivity() {
         })
     }
 
+
     companion object{
+        const val PREFERENCES = "shared_preferences"
         const val USERNAME = "username"
         const val PASSWORD = "pasword"
         const val REMEMBER = "remember"

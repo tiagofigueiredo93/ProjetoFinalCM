@@ -1,6 +1,7 @@
 package ipvc.estg.projetofinal.api
 
 data class OutPutReport (
+    val id: Int,
     val latitude: String,
     val longitude: String,
     val tipo: String,

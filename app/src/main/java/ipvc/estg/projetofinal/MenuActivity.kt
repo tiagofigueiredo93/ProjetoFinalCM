@@ -10,6 +10,8 @@ import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import ipvc.estg.projetofinal.MainLogin.Companion.ID_UITLIZADOR
+import ipvc.estg.projetofinal.MainLogin.Companion.PREFERENCES
 
 import ipvc.estg.projetofinal.MainLogin.Companion.USERNAME
 
@@ -25,14 +27,15 @@ class MenuActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_menu)
-        shared_preferences = getSharedPreferences("shared_preferences", Context.MODE_PRIVATE)
+        shared_preferences = getSharedPreferences(PREFERENCES, Context.MODE_PRIVATE)
 
 
         //Nome do utilizador no menu
         val username = shared_preferences.getString(USERNAME,"")
+
         val id = shared_preferences.getInt("id",0)
         textUtilizador = findViewById(R.id.textUsername)
-        textUtilizador.text = "$username"+"$id"
+        textUtilizador.text = "$username"+" id: $id"
 
         //Criar
         val criar = findViewById<Button>(R.id.createReportMenu)

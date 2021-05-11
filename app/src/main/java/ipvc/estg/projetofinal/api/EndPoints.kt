@@ -1,6 +1,6 @@
 package ipvc.estg.projetofinal.api
 
-import androidx.room.Query
+
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -8,14 +8,15 @@ interface EndPoints {
 
 
 
-
+    @GET ("/smartcity/api/utilizador")
+    fun getUtilizadores(): Call<List<Utilizador>>
 
     @GET ("/myslim/api/report3")
     fun getReports(): Call<List<Report>>
 
     @FormUrlEncoded
     @POST("/myslim/api/login")
-    fun login(@Field("username") username: String?, @Field("password") password: String?): Call<OutputLogin>
+    fun login(@Field("username") username: String, @Field("password") password: String): Call<OutputLogin>
     //username e password vai no corpo do pedido
 
 
