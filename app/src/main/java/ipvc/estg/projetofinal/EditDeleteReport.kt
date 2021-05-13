@@ -61,19 +61,20 @@ class EditDeleteReport : AppCompatActivity() {
             val replyIntent = Intent()
             replyIntent.putExtra(EDIT_ID, id)
             if (TextUtils.isEmpty(editType.text)  || TextUtils.isEmpty(editDescription.text)) {
-                Toast.makeText(this@EditDeleteReport, "Campos vazios, reportação não foi editada!", Toast.LENGTH_LONG).show()
+                Toast.makeText(this@EditDeleteReport, getString(R.string.camposVaziosEditReport), Toast.LENGTH_LONG).show()
                 setResult(Activity.RESULT_CANCELED, replyIntent)
             } else {
-                val edit_tipo = editType.text.toString()
-                replyIntent.putExtra(EDIT_TYPE, edit_tipo)
-                val edit_descricao = editDescription.text.toString()
-                replyIntent.putExtra(EDIT_DESCRIPTION, edit_descricao)
+                val edit_type = editType.text.toString()
+                replyIntent.putExtra(EDIT_TYPE, edit_type)
+                val edit_description = editDescription.text.toString()
+                replyIntent.putExtra(EDIT_DESCRIPTION, edit_description)
                 val latitude = latitude
                 replyIntent.putExtra(EDIT_LATITUDE, latitude)
                 val longitude = longitude
                 replyIntent.putExtra(EDIT_LONGITUDE, longitude)
                 replyIntent.putExtra(STATUS, "EDIT")
                 setResult(Activity.RESULT_OK, replyIntent)
+                //onActivityResult
             }
 
             finish()
@@ -86,7 +87,7 @@ class EditDeleteReport : AppCompatActivity() {
                 replyIntent.putExtra(DELETE_ID, id)
                 replyIntent.putExtra(STATUS, "DELETE")
                 setResult(Activity.RESULT_OK, replyIntent)
-
+                //onActivityResult
             finish()
         }
 

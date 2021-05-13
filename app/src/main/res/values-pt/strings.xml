@@ -26,5 +26,12 @@
     <string name="remember">Lembrar</string>
     <string name="acessDenied">Você não tem acesso a esta reportação!</string>
     <string name="camposNecessarios">Preencha os campos obrigatórios.</string>
+    <string name="camposVaziosEditReport">Campos vazios, a reportação não foi editada!</string>
+    <string name="editcancel">Edição cancelada, campos vazios.</string>
+    <string name="deleteCancel">Nota não foi apagada, campos vazios.</string>
+    <string name="notaGuardada">Nota guardada com sucesso</string>
+    <string name="notaNaoGuardada">Nota não foi guardada, campos vazios.</string>
+    <string name="notasTodasApagadas">Todas as notas apagadas com sucesso.</string>
+    <string name="delete_notes">Apagar notas</string>
 
 </resources>
