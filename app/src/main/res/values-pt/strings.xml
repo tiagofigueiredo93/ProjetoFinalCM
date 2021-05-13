@@ -10,5 +10,19 @@
     <string name="notes_title">Título da nota</string>
     <string name="notes_description">Descrição da nota</string>
     <string name="note_text">Insere o texto da nota</string>
+    <string name="next">Seguinte</string>
+    <string name="notas_pessoais">Notas Pessoais</string>
+    <string name="title_activity_create_report">Criar reportação</string>
+    <string name="save_report">Guardar reportação</string>
+    <string name="description">Descrição</string>
+    <string name="type">Tipo</string>
+    <string name="bem_vindo">Bem-vindo</string>
+    <string name="all_reports">Reportações</string>
+    <string name="logout">Sair</string>
+    <string name="reports_map">Mapa das reportações</string>
+    <string name="title_activity_maps">Mapa</string>
+    <string name="create_report">Criar reportação</string>
+    <string name="create_report2">Criar reportação</string>
+    <string name="remember">Lembrar</string>
 
 </resources>

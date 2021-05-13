@@ -30,5 +30,20 @@ interface EndPoints {
                  @Field("imagem") imagem: String?,
                 @Field("utilizador_id") utilizador_id: Int): Call<OutPutReport>
 
+    @GET ("/myslim/api/report/{id}")
+    fun getReportId(@Path("id") id: String?): Call<List<Report>>
+
+    @FormUrlEncoded
+    @POST("/myslim/api/report_edit/{id}")
+    fun editar(@Path("id") id: String?,
+               @Field("latitude") latitude: String?,
+               @Field("longitude") longitude: String?,
+               @Field("tipo") tipo: String?,
+               @Field("descricao") descricao: String?,
+               @Field("imagem") imagem: String?,
+               @Field("utilizador_id") utilizador_id: Int?): Call<OutPutEditReport>
+
+
+
 
 }

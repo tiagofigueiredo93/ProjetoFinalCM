@@ -2,6 +2,7 @@ package ipvc.estg.projetofinal
 
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.location.Location
@@ -17,6 +18,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import ipvc.estg.projetofinal.api.EndPoints
 import ipvc.estg.projetofinal.api.Report
@@ -25,7 +27,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
+class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener {
 
     private lateinit var mMap: GoogleMap
     private lateinit var  reports: List<Report>
@@ -38,6 +40,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     //Constante utilizada na verificação se existe permissão para aceder á localização atual
     private val LOCATION_PERMISSION_REQUEST_CODE = 1
+
+    //Constante para edição
+    private val reportEditActivityRequestCode = 1
 
     //Declaração do shared_preferences
     private lateinit var shared_preferences: SharedPreferences
@@ -59,7 +64,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val request = ServiceBuilder.buildService(EndPoints::class.java)
         val call = request.getReports()
         var position: LatLng
-        val utilizador_id = shared_preferences.getInt("id", 0)
+        val utilizador_id = shared_preferences.getInt(MainLogin.ID_UITLIZADOR, 0)
 
         call.enqueue(object : Callback<List<Report>> {
             override fun onResponse(call: Call<List<Report>>, response: Response<List<Report>>){
@@ -85,6 +90,38 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         })
 
     }
+    override fun onInfoWindowClick(p0: Marker?) {
+        val request = ServiceBuilder.buildService(EndPoints::class.java)
+        val call :Call <List<Report>> = request.getReportId(p0!!.title)
+        val utilizador_id = shared_preferences.getInt(MainLogin.ID_UITLIZADOR, 0)
+
+        call.enqueue(object : Callback<List<Report>> {
+            override fun onResponse(call: Call<List<Report>>, response: Response<List<Report>>) {
+                if(response.isSuccessful){
+                    reports = response.body()!!
+                    for(report in reports){
+                        if(report.utilizador_id == utilizador_id){
+                            Toast.makeText(this@MapsActivity, report.descricao, Toast.LENGTH_SHORT).show()
+                            val intent = Intent(this@MapsActivity,EditDeleteReport::class.java)
+                            intent.putExtra(REPORT_ID, report.id.toString())
+                            intent.putExtra(REPORT_TYPE, report.tipo)
+                            intent.putExtra(REPORT_DESCRIPTION, report.descricao)
+                            intent.putExtra(REPORT_LATITUDE, report.latitude)
+                            intent.putExtra(REPORT_LONGITUDE, report.longitude)
+                            intent.putExtra(REPORT_UTILIZADOR_ID, report.utilizador_id.toString())
+                            startActivityForResult(intent, reportEditActivityRequestCode)
+                        }else{
+                            Toast.makeText(this@MapsActivity,"R.string.id_error_edit", Toast.LENGTH_LONG).show()
+                        }
+
+                    }
+                }
+            }
+            override fun onFailure(call: Call<List<Report>>, t: Throwable) {
+                Toast.makeText(this@MapsActivity,"${t.message}", Toast.LENGTH_LONG).show()
+            }
+        })
+    }
 
     /**
      * Manipulates the map once available.
@@ -102,7 +139,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 //        val viana = LatLng(41.6932, -8.83287)
 //        mMap.addMarker(MarkerOptions().position(viana).title("Marker in Viana do Castelo"))
 //        mMap.moveCamera(CameraUpdateFactory.newLatLng(viana))
-
+        mMap.setOnInfoWindowClickListener(this)
         setUpMap()
     }
 
@@ -135,5 +172,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
             }
         }
+    }
+    companion object {
+        const val STATUS = ""
+        const val DELETE_ID = "DELETE_ID"
+            const val REPORT_ID = "REPORT_ID"
+        const val REPORT_TYPE = "REPORT_TYPE"
+        const val REPORT_DESCRIPTION = "REPORT_DESCRIPTION"
+        const val REPORT_LATITUDE = "REPORT_LATITUDE"
+        const val REPORT_LONGITUDE = "REPORT_LONGITUDE"
+        const val REPORT_UTILIZADOR_ID = "REPORT_UTILIZADOR_ID"
     }
 }
