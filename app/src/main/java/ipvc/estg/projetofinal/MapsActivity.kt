@@ -176,7 +176,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnInfoWi
     companion object {
         const val STATUS = ""
         const val DELETE_ID = "DELETE_ID"
-            const val REPORT_ID = "REPORT_ID"
+        const val REPORT_ID = "REPORT_ID"
         const val REPORT_TYPE = "REPORT_TYPE"
         const val REPORT_DESCRIPTION = "REPORT_DESCRIPTION"
         const val REPORT_LATITUDE = "REPORT_LATITUDE"

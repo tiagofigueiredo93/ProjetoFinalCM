@@ -26,5 +26,14 @@ class EditDeleteReport : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_delete_report)
+
+        editType = findViewById(R.id.editTypeReport)
+        editDescription = findViewById(R.id.editDescriptionReport)
+
+        var id = intent.getStringExtra(MapsActivity.REPORT_ID)
+        var type = intent.getStringExtra(MapsActivity.REPORT_TYPE)
+        var description = intent.getStringExtra(MapsActivity.REPORT_DESCRIPTION)
+        editType.setText(type.toString())
+        editDescription.setText(description.toString())
     }
 }
