@@ -9,7 +9,7 @@
 
 
 
-
+    <!--RECYCLER-->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/reportsRecycler"
         tools:listitem="@layout/reports_recycler_line"
