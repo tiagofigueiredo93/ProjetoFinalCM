@@ -21,7 +21,7 @@
         android:textStyle="bold" />
 
     <EditText
-        android:id="@+id/edit_descriptionReport"
+        android:id="@+id/editDescriptionReport"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/grey"
@@ -34,7 +34,7 @@
 
 
     <Button
-        android:id="@+id/saveReport"
+        android:id="@+id/editReport"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/white"
@@ -42,5 +42,16 @@
         android:textColor="@color/black"
 
         />
+
+    <Button
+        android:id="@+id/deleteReport"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/white"
+        android:text="Delete report"
+        android:textColor="@color/black"
+
+        />
+
 
 </LinearLayout>

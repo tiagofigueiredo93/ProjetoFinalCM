@@ -8,5 +8,5 @@ data class OutPutEditReport(
     val imagem: String,
     val utilizador_id: String,
     val status: String,
-    val MSG: String
+    val Mensagem: String
 )

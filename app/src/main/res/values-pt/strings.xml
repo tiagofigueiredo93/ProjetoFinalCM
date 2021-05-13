@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Projeto Final</string>
-    <string name="welcome">Bem-vindo à app</string>
+    <string name="welcome">Bem-vindo à aplicação</string>
     <string name="username">Utilizador</string>
     <string name="login">Entrar</string>
     <string name="password">Palavra-passe</string>
@@ -24,5 +24,7 @@
     <string name="create_report">Criar reportação</string>
     <string name="create_report2">Criar reportação</string>
     <string name="remember">Lembrar</string>
+    <string name="acessDenied">Você não tem acesso a esta reportação!</string>
+    <string name="camposNecessarios">Preencha os campos obrigatórios.</string>
 
 </resources>

@@ -1,12 +1,14 @@
 package ipvc.estg.projetofinal
 
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -20,9 +22,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
-import ipvc.estg.projetofinal.api.EndPoints
-import ipvc.estg.projetofinal.api.Report
-import ipvc.estg.projetofinal.api.ServiceBuilder
+import ipvc.estg.projetofinal.api.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -90,6 +90,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnInfoWi
         })
 
     }
+
+    //FUNÇÃO PARA POSTERIORMENTE EFETUAR A EDIÇÃO OU APAGAR A REPORTAÇÃO FEITA
     override fun onInfoWindowClick(p0: Marker?) {
         val request = ServiceBuilder.buildService(EndPoints::class.java)
         val call :Call <List<Report>> = request.getReportId(p0!!.title)
@@ -99,9 +101,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnInfoWi
             override fun onResponse(call: Call<List<Report>>, response: Response<List<Report>>) {
                 if(response.isSuccessful){
                     reports = response.body()!!
+                   //Verificação do id
                     for(report in reports){
                         if(report.utilizador_id == utilizador_id){
-                            Toast.makeText(this@MapsActivity, report.descricao, Toast.LENGTH_SHORT).show()
+
                             val intent = Intent(this@MapsActivity,EditDeleteReport::class.java)
                             intent.putExtra(REPORT_ID, report.id.toString())
                             intent.putExtra(REPORT_TYPE, report.tipo)
@@ -111,7 +114,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnInfoWi
                             intent.putExtra(REPORT_UTILIZADOR_ID, report.utilizador_id.toString())
                             startActivityForResult(intent, reportEditActivityRequestCode)
                         }else{
-                            Toast.makeText(this@MapsActivity,"R.string.id_error_edit", Toast.LENGTH_LONG).show()
+                            Toast.makeText(this@MapsActivity,getString(R.string.acessDenied), Toast.LENGTH_LONG).show()
                         }
 
                     }
@@ -143,6 +146,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnInfoWi
         setUpMap()
     }
 
+
     private fun setUpMap() {
         //Verifica se existe permissão para aceder á localiozação atual
         if(ActivityCompat.checkSelfPermission(this,
@@ -153,7 +157,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnInfoWi
                 arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST_CODE)
 
             return
-            //Caso haja permissão vai entrar aqui
+            //Caso haja permissão
         } else {
             //Inserção de um simbolo com a nossa localização atual no mapa
             mMap.isMyLocationEnabled = true
@@ -173,10 +177,85 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnInfoWi
             }
         }
     }
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == reportEditActivityRequestCode && resultCode == Activity.RESULT_OK) {
+
+            var id = data?.getStringExtra(EditDeleteReport.EDIT_ID)
+            var id_delete = data?.getStringExtra(EditDeleteReport.DELETE_ID)
+            var edit_type = data?.getStringExtra(EditDeleteReport.EDIT_TYPE).toString()
+            var edit_description = data?.getStringExtra(EditDeleteReport.EDIT_DESCRIPTION).toString()
+            var edit_latitude = data?.getDoubleExtra(EditDeleteReport.EDIT_LATITUDE, 0.0).toString()
+            var edit_longitude = data?.getDoubleExtra(EditDeleteReport.EDIT_LONGITUDE, 0.0).toString()
+            val utilizador_id = shared_preferences.getInt("id", 0)
+
+            if(data?.getStringExtra(EditDeleteReport.STATUS) == "EDIT"){
+                val request = ServiceBuilder.buildService(EndPoints::class.java)
+                //chamado do endpoint para a edição da reportação
+                val call = request.editReport(
+                    id = id,
+                    latitude = edit_latitude,
+                    longitude = edit_longitude,
+                    tipo = edit_type,
+                    descricao = edit_description,
+                    imagem = "imagem",
+                    utilizador_id = utilizador_id)
+
+                call.enqueue(object : Callback<OutPutEditReport> {
+                    override fun onResponse(call: Call<OutPutEditReport>, response: Response<OutPutEditReport>){
+                        if (response.isSuccessful){
+                            val c: OutPutEditReport = response.body()!!
+                            Toast.makeText(this@MapsActivity, c.Mensagem, Toast.LENGTH_LONG).show()
+                            val intent = Intent(this@MapsActivity, MapsActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                        }
+                    }
+                    override fun onFailure(call: Call<OutPutEditReport>, t: Throwable){
+                        Toast.makeText(this@MapsActivity,"${t.message}", Toast.LENGTH_SHORT).show()
+                    }
+                })
+
+
+                //DELETE REPORT
+            } else if(data?.getStringExtra(EditDeleteReport.STATUS) == "DELETE"){
+
+                val request = ServiceBuilder.buildService(EndPoints::class.java)
+                val call = request.deleteReport(id = id_delete)
+
+
+                call.enqueue(object : Callback<OutPutDeleteReport> {
+                    override fun onResponse(call: Call<OutPutDeleteReport>, response: Response<OutPutDeleteReport>){
+                        if (response.isSuccessful){
+                            val c: OutPutDeleteReport = response.body()!!
+                            Toast.makeText(this@MapsActivity, c.Mensagem, Toast.LENGTH_LONG).show()
+                            val intent = Intent(this@MapsActivity, MapsActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                        }
+                    }
+                    override fun onFailure(call: Call<OutPutDeleteReport>, t: Throwable){
+                        Toast.makeText(this@MapsActivity,"${t.message}", Toast.LENGTH_SHORT).show()
+                    }
+                })
+            }
+
+        } else if (resultCode == Activity.RESULT_CANCELED) {
+            if(data?.getStringExtra(EditDeleteReport.STATUS) == "EDIT"){
+                Toast.makeText(this, "Report not edited, fields empty", Toast.LENGTH_SHORT).show()
+            } else if(data?.getStringExtra(EditDeleteReport.STATUS) == "DELETE"){
+                Toast.makeText(this, "Report not deleted, fields empty", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+    }
     companion object {
         const val STATUS = ""
         const val DELETE_ID = "DELETE_ID"
-            const val REPORT_ID = "REPORT_ID"
+        const val REPORT_ID = "REPORT_ID"
         const val REPORT_TYPE = "REPORT_TYPE"
         const val REPORT_DESCRIPTION = "REPORT_DESCRIPTION"
         const val REPORT_LATITUDE = "REPORT_LATITUDE"
