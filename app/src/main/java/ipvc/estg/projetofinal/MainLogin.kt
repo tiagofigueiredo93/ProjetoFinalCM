@@ -64,7 +64,7 @@ class MainLogin : AppCompatActivity() {
                 if (response.isSuccessful){
                     val c: OutputLogin = response.body()!!
                     if(TextUtils.isEmpty(editUsernameView.text) || TextUtils.isEmpty(editPasswordView.text)) {
-                        Toast.makeText(this@MainLogin, "R.string.tiago", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this@MainLogin, getString(R.string.camposNecessarios), Toast.LENGTH_LONG).show()
                     }else{
                         if(c.status =="false"){
                             Toast.makeText(this@MainLogin, c.msg, Toast.LENGTH_LONG).show()

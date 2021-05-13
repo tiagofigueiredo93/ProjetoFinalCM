@@ -90,6 +90,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnInfoWi
         })
 
     }
+
+    //FUNÇÃO PARA POSTERIORMENTE EFETUAR A EDIÇÃO OU APAGAR A REPORTAÇÃO FEITA
     override fun onInfoWindowClick(p0: Marker?) {
         val request = ServiceBuilder.buildService(EndPoints::class.java)
         val call :Call <List<Report>> = request.getReportId(p0!!.title)
@@ -99,6 +101,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnInfoWi
             override fun onResponse(call: Call<List<Report>>, response: Response<List<Report>>) {
                 if(response.isSuccessful){
                     reports = response.body()!!
+                   //Verificação do id
                     for(report in reports){
                         if(report.utilizador_id == utilizador_id){
 
@@ -143,6 +146,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnInfoWi
         setUpMap()
     }
 
+
     private fun setUpMap() {
         //Verifica se existe permissão para aceder á localiozação atual
         if(ActivityCompat.checkSelfPermission(this,
@@ -153,7 +157,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnInfoWi
                 arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST_CODE)
 
             return
-            //Caso haja permissão vai entrar aqui
+            //Caso haja permissão
         } else {
             //Inserção de um simbolo com a nossa localização atual no mapa
             mMap.isMyLocationEnabled = true
@@ -190,7 +194,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnInfoWi
 
             if(data?.getStringExtra(EditDeleteReport.STATUS) == "EDIT"){
                 val request = ServiceBuilder.buildService(EndPoints::class.java)
-                val call = request.editar(
+                //chamado do endpoint para a edição da reportação
+                val call = request.editReport(
                     id = id,
                     latitude = edit_latitude,
                     longitude = edit_longitude,
@@ -213,6 +218,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnInfoWi
                         Toast.makeText(this@MapsActivity,"${t.message}", Toast.LENGTH_SHORT).show()
                     }
                 })
+
+
+                //DELETE REPORT
             } else if(data?.getStringExtra(EditDeleteReport.STATUS) == "DELETE"){
 
                 val request = ServiceBuilder.buildService(EndPoints::class.java)

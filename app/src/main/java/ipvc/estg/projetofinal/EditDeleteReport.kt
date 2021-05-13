@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.*
 
@@ -60,6 +61,7 @@ class EditDeleteReport : AppCompatActivity() {
             val replyIntent = Intent()
             replyIntent.putExtra(EDIT_ID, id)
             if (TextUtils.isEmpty(editType.text)  || TextUtils.isEmpty(editDescription.text)) {
+                Toast.makeText(this@EditDeleteReport, "Campos vazios, reportação não foi editada!", Toast.LENGTH_LONG).show()
                 setResult(Activity.RESULT_CANCELED, replyIntent)
             } else {
                 val edit_tipo = editType.text.toString()
@@ -80,9 +82,11 @@ class EditDeleteReport : AppCompatActivity() {
         val buttonDelete = findViewById<Button>(R.id.deleteReport)
         buttonDelete.setOnClickListener {
             val replyIntent = Intent()
+
                 replyIntent.putExtra(DELETE_ID, id)
                 replyIntent.putExtra(STATUS, "DELETE")
                 setResult(Activity.RESULT_OK, replyIntent)
+
             finish()
         }
 

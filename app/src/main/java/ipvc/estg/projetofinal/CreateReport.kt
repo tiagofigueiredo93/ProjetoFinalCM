@@ -1,5 +1,6 @@
 /**/package ipvc.estg.projetofinal
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -7,6 +8,7 @@ import android.content.pm.PackageManager
 import android.location.Location
 
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -51,6 +53,8 @@ class CreateReport : AppCompatActivity() {
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(p0: LocationResult?) {
                 super.onLocationResult(p0)
+
+                //Recebemos as coordenadas a partir do LocationResult e atribuimos a cada variável
                 lastLocation = p0?.lastLocation!!
                 latitude = lastLocation.latitude
                 longitude = lastLocation.longitude
@@ -60,7 +64,7 @@ class CreateReport : AppCompatActivity() {
         createLocationRequest()
 
     }
-
+    //Obter a localização de 10 em 10 segnds com a maior precisão
     private fun createLocationRequest() {
         locationRequest = LocationRequest()
         locationRequest.interval = 10000
@@ -74,7 +78,7 @@ class CreateReport : AppCompatActivity() {
         val longitude = longitude
         val tipo = editTipoView.text.toString()
         val descricao = editDescricaoView.text.toString()
-
+        val replyIntent = Intent()
         val utilizador_id = shared_preferences.getInt(MainLogin.ID_UITLIZADOR, 0)
 
 
@@ -87,32 +91,36 @@ class CreateReport : AppCompatActivity() {
             utilizador_id = utilizador_id
         )
 
+        if(TextUtils.isEmpty(editTipoView.text)  || TextUtils.isEmpty(editDescricaoView.text)){
+            Toast.makeText(this@CreateReport, R.string.camposNecessarios, Toast.LENGTH_LONG).show()
+        }else{
+            call.enqueue(object : Callback<OutPutReport> {
+                override fun onResponse(call: Call<OutPutReport>, response: Response<OutPutReport>){
+                    if (response.isSuccessful){
+                        val c: OutPutReport = response.body()!!
+                        Toast.makeText(this@CreateReport, c.Mensagem, Toast.LENGTH_LONG).show()
 
-        call.enqueue(object : Callback<OutPutReport> {
-            override fun onResponse(call: Call<OutPutReport>, response: Response<OutPutReport>){
-                if (response.isSuccessful){
-                    val c: OutPutReport = response.body()!!
-                    Toast.makeText(this@CreateReport, c.Mensagem, Toast.LENGTH_LONG).show()
-
-                    val intent = Intent(this@CreateReport, MapsActivity::class.java)
-                    startActivity(intent);
-                    finish()
+                        val intent = Intent(this@CreateReport, MapsActivity::class.java)
+                        startActivity(intent);
+                        finish()
 
 
+                    }
                 }
-            }
-            override fun onFailure(call: Call<OutPutReport>, t: Throwable){
-                Toast.makeText(this@CreateReport,"${t.message}", Toast.LENGTH_SHORT).show()
-            }
-        })
+                override fun onFailure(call: Call<OutPutReport>, t: Throwable){
+                    Toast.makeText(this@CreateReport,"${t.message}", Toast.LENGTH_SHORT).show()
+                }
+            })
+        }
+
     }
 
-
+    //onPause
     override fun onPause() {
         super.onPause()
         fusedLocationClient.removeLocationUpdates(locationCallback)
     }
-
+    //onResume
     override fun onResume() {
         super.onResume()
         startLocationUpdates()

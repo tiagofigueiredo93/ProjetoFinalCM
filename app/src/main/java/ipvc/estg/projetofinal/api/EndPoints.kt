@@ -38,7 +38,7 @@ interface EndPoints {
     //Edição
     @FormUrlEncoded
     @POST("/myslim/api/report_edit/{id}")
-    fun editar(@Path("id") id: String?,
+    fun editReport(@Path("id") id: String?,
                @Field("latitude") latitude: String?,
                @Field("longitude") longitude: String?,
                @Field("tipo") tipo: String?,
