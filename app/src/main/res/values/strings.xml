@@ -34,6 +34,13 @@
     <string name="remember">Remember</string>
     <string name="acessDenied">You do not have access to this report!</string>
     <string name="camposNecessarios">Fill in the required fields.</string>
-    
+    <string name="camposVaziosEditReport">Empty fields, report has not been edited!!</string>
+    <string name="notaGuardada">Note saved successfully.</string>
+    <string name="notaNaoGuardada">Note not saved, empty fields.</string>
+    <string name="editcancel">Edit canceled, empty fields.</string>
+    <string name="deleteCancel">\"Note was not erased, empty fields. \"</string>
+    <string name="notasTodasApagadas">Notes successfully deleted.</string>
+    <string name="delete_notes">Delete notes</string>
+
 
 </resources>

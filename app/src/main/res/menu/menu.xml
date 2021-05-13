@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:id="@+id/apagarNotas"
-        android:title="Apagar notas">
+        android:title="@string/delete_notes">
 
     </item>
 </menu>

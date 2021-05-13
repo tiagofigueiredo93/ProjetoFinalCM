@@ -61,14 +61,8 @@ class MainActivity : AppCompatActivity(), CellClickListener {
 
             startActivityForResult(intent, newWordActivityRequestCode)
         }
-//Back na app
-
-
-
 
     }
-
-
 
 //LineAdapter
     override fun onCellClickListener(data: Notes) {
@@ -98,11 +92,11 @@ class MainActivity : AppCompatActivity(), CellClickListener {
 
                 val note = Notes(title = ptitle, description = pdescription, dateTime = pdate, text = pText)
                 noteViewModel.insert(note)
-                Toast.makeText(this, "Nota inserida com sucesso.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.notaGuardada), Toast.LENGTH_SHORT).show()
 
 
         }else if(resultCode == Activity.RESULT_CANCELED){
-            Toast.makeText(applicationContext, "Nota não inserida, campos vazios.",Toast.LENGTH_SHORT).show()
+            Toast.makeText(applicationContext, getString(R.string.notaNaoGuardada),Toast.LENGTH_SHORT).show()
         }
 
 
@@ -121,20 +115,20 @@ class MainActivity : AppCompatActivity(), CellClickListener {
               if(data?.getStringExtra(Edit_notas.STATUS) == "DELETE"){
                   //apagar nota
                 noteViewModel.delete(id_delete?.toIntOrNull())
-                  Toast.makeText(this, "Nota apagada com sucesso.", Toast.LENGTH_SHORT).show()
+                  Toast.makeText(this, "Note successfully deleted.", Toast.LENGTH_SHORT).show()
 
             }else if(data?.getStringExtra(Edit_notas.STATUS) == "EDIT"){
 
                 //EDIÇÃO DA NOTA
                   noteViewModel.update(id?.toIntOrNull(), edit_titulo, edit_description,text)
-                  Toast.makeText(this, "Nota editada com sucesso.", Toast.LENGTH_SHORT).show()
+                  Toast.makeText(this, "Note edited successfully.", Toast.LENGTH_SHORT).show()
               }
 
         } else if (resultCode == Activity.RESULT_CANCELED) {
             if(data?.getStringExtra(Edit_notas.STATUS) == "EDIT"){
-                Toast.makeText(this, "Campos vazios.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.editcancel), Toast.LENGTH_SHORT).show()
             } else if(data?.getStringExtra(Edit_notas.STATUS) == "DELETE"){
-                Toast.makeText(this, "Campos vazios.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.deleteCancel), Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -154,7 +148,7 @@ class MainActivity : AppCompatActivity(), CellClickListener {
         return when (item.itemId) {
            R.id.apagarNotas -> {
                 noteViewModel.deleteAll()
-               Toast.makeText(this,"Notas apagadas com sucesso.", Toast.LENGTH_SHORT).show()
+               Toast.makeText(this,getString(R.string.notasTodasApagadas), Toast.LENGTH_SHORT).show()
 
           true
            }

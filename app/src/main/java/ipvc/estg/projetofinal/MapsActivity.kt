@@ -103,6 +103,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnInfoWi
                     reports = response.body()!!
                    //Verificação do id
                     for(report in reports){
+
+                        //VERIFICAÇÃO DO ID PARA QUE EU CONSIGA CONTROLAR SE O UTILIZADOR PODE OU NAO EDITAR/APAGAR O SEU REPORT OU DE OUTRO UTILZIADOR
                         if(report.utilizador_id == utilizador_id){
 
                             val intent = Intent(this@MapsActivity,EditDeleteReport::class.java)
@@ -178,7 +180,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnInfoWi
         }
     }
 
-
+    //onActivityResult
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 

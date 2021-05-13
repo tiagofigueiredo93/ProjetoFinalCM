@@ -71,6 +71,8 @@ class CreateReport : AppCompatActivity() {
         locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
 
     }
+
+    //CLICK DO BOTÂO GUARDAR REPORT
     fun reportar(view: View) {
 
         val request = ServiceBuilder.buildService(EndPoints::class.java)
@@ -90,7 +92,7 @@ class CreateReport : AppCompatActivity() {
             imagem = "imagem",
             utilizador_id = utilizador_id
         )
-
+        //VERIFICAÇÃO SE OS CAMPOS ESTÃO VAZIOS
         if(TextUtils.isEmpty(editTipoView.text)  || TextUtils.isEmpty(editDescricaoView.text)){
             Toast.makeText(this@CreateReport, R.string.camposNecessarios, Toast.LENGTH_LONG).show()
         }else{
