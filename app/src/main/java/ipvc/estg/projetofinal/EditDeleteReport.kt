@@ -55,8 +55,8 @@ class EditDeleteReport : AppCompatActivity() {
         createLocationRequest()
 
         //BOTÃO EDITAR
-        val button = findViewById<Button>(R.id.editReport)
-        button.setOnClickListener {
+        val buttonEdit = findViewById<Button>(R.id.editReport)
+        buttonEdit.setOnClickListener {
             val replyIntent = Intent()
             replyIntent.putExtra(EDIT_ID, id)
             if (TextUtils.isEmpty(editType.text)  || TextUtils.isEmpty(editDescription.text)) {
@@ -74,6 +74,15 @@ class EditDeleteReport : AppCompatActivity() {
                 setResult(Activity.RESULT_OK, replyIntent)
             }
 
+            finish()
+        }
+
+        val buttonDelete = findViewById<Button>(R.id.deleteReport)
+        buttonDelete.setOnClickListener {
+            val replyIntent = Intent()
+                replyIntent.putExtra(DELETE_ID, id)
+                replyIntent.putExtra(STATUS, "DELETE")
+                setResult(Activity.RESULT_OK, replyIntent)
             finish()
         }
 

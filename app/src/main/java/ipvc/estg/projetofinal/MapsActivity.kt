@@ -8,6 +8,7 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -21,10 +22,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
-import ipvc.estg.projetofinal.api.EndPoints
-import ipvc.estg.projetofinal.api.OutPutEditReport
-import ipvc.estg.projetofinal.api.Report
-import ipvc.estg.projetofinal.api.ServiceBuilder
+import ipvc.estg.projetofinal.api.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -212,6 +210,26 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnInfoWi
                         }
                     }
                     override fun onFailure(call: Call<OutPutEditReport>, t: Throwable){
+                        Toast.makeText(this@MapsActivity,"${t.message}", Toast.LENGTH_SHORT).show()
+                    }
+                })
+            } else if(data?.getStringExtra(EditDeleteReport.STATUS) == "DELETE"){
+
+                val request = ServiceBuilder.buildService(EndPoints::class.java)
+                val call = request.deleteReport(id = id_delete)
+
+
+                call.enqueue(object : Callback<OutPutDeleteReport> {
+                    override fun onResponse(call: Call<OutPutDeleteReport>, response: Response<OutPutDeleteReport>){
+                        if (response.isSuccessful){
+                            val c: OutPutDeleteReport = response.body()!!
+                            Toast.makeText(this@MapsActivity, c.Mensagem, Toast.LENGTH_LONG).show()
+                            val intent = Intent(this@MapsActivity, MapsActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                        }
+                    }
+                    override fun onFailure(call: Call<OutPutDeleteReport>, t: Throwable){
                         Toast.makeText(this@MapsActivity,"${t.message}", Toast.LENGTH_SHORT).show()
                     }
                 })
