@@ -1,6 +1,7 @@
 package ipvc.estg.projetofinal
 
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -21,6 +22,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import ipvc.estg.projetofinal.api.EndPoints
+import ipvc.estg.projetofinal.api.OutPutEditReport
 import ipvc.estg.projetofinal.api.Report
 import ipvc.estg.projetofinal.api.ServiceBuilder
 import retrofit2.Call
@@ -101,7 +103,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnInfoWi
                     reports = response.body()!!
                     for(report in reports){
                         if(report.utilizador_id == utilizador_id){
-                            Toast.makeText(this@MapsActivity, report.descricao, Toast.LENGTH_SHORT).show()
+
                             val intent = Intent(this@MapsActivity,EditDeleteReport::class.java)
                             intent.putExtra(REPORT_ID, report.id.toString())
                             intent.putExtra(REPORT_TYPE, report.tipo)
@@ -111,7 +113,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnInfoWi
                             intent.putExtra(REPORT_UTILIZADOR_ID, report.utilizador_id.toString())
                             startActivityForResult(intent, reportEditActivityRequestCode)
                         }else{
-                            Toast.makeText(this@MapsActivity,"R.string.id_error_edit", Toast.LENGTH_LONG).show()
+                            Toast.makeText(this@MapsActivity,getString(R.string.acessDenied), Toast.LENGTH_LONG).show()
                         }
 
                     }
@@ -172,6 +174,57 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnInfoWi
                 }
             }
         }
+    }
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == reportEditActivityRequestCode && resultCode == Activity.RESULT_OK) {
+
+            var id = data?.getStringExtra(EditDeleteReport.EDIT_ID)
+            var id_delete = data?.getStringExtra(EditDeleteReport.DELETE_ID)
+            var edit_type = data?.getStringExtra(EditDeleteReport.EDIT_TYPE).toString()
+            var edit_description = data?.getStringExtra(EditDeleteReport.EDIT_DESCRIPTION).toString()
+            var edit_latitude = data?.getDoubleExtra(EditDeleteReport.EDIT_LATITUDE, 0.0).toString()
+            var edit_longitude = data?.getDoubleExtra(EditDeleteReport.EDIT_LONGITUDE, 0.0).toString()
+            val utilizador_id = shared_preferences.getInt("id", 0)
+
+            if(data?.getStringExtra(EditDeleteReport.STATUS) == "EDIT"){
+                val request = ServiceBuilder.buildService(EndPoints::class.java)
+                val call = request.editar(
+                    id = id,
+                    latitude = edit_latitude,
+                    longitude = edit_longitude,
+                    tipo = edit_type,
+                    descricao = edit_description,
+                    imagem = "imagem",
+                    utilizador_id = utilizador_id)
+
+                call.enqueue(object : Callback<OutPutEditReport> {
+                    override fun onResponse(call: Call<OutPutEditReport>, response: Response<OutPutEditReport>){
+                        if (response.isSuccessful){
+                            val c: OutPutEditReport = response.body()!!
+                            Toast.makeText(this@MapsActivity, c.Mensagem, Toast.LENGTH_LONG).show()
+                            val intent = Intent(this@MapsActivity, MapsActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                        }
+                    }
+                    override fun onFailure(call: Call<OutPutEditReport>, t: Throwable){
+                        Toast.makeText(this@MapsActivity,"${t.message}", Toast.LENGTH_SHORT).show()
+                    }
+                })
+            }
+
+        } else if (resultCode == Activity.RESULT_CANCELED) {
+            if(data?.getStringExtra(EditDeleteReport.STATUS) == "EDIT"){
+                Toast.makeText(this, "Report not edited, fields empty", Toast.LENGTH_SHORT).show()
+            } else if(data?.getStringExtra(EditDeleteReport.STATUS) == "DELETE"){
+                Toast.makeText(this, "Report not deleted, fields empty", Toast.LENGTH_SHORT).show()
+            }
+        }
+
     }
     companion object {
         const val STATUS = ""

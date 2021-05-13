@@ -32,5 +32,6 @@
     <string name="create_report">Create report</string>
     <string name="create_report2">Create report</string>
     <string name="remember">Remember</string>
+    <string name="acessDenied">You do not have access to this report!</string>
 
 </resources>

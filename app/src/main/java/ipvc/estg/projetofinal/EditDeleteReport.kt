@@ -1,13 +1,17 @@
 package ipvc.estg.projetofinal
 
+import android.app.Activity
+import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.TextUtils
+import android.widget.Button
 import android.widget.EditText
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationRequest
+import androidx.core.app.ActivityCompat
+import com.google.android.gms.location.*
 
 class EditDeleteReport : AppCompatActivity() {
 
@@ -35,5 +39,83 @@ class EditDeleteReport : AppCompatActivity() {
         var description = intent.getStringExtra(MapsActivity.REPORT_DESCRIPTION)
         editType.setText(type.toString())
         editDescription.setText(description.toString())
+
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
+        locationCallback = object : LocationCallback() {
+            override fun onLocationResult(p0: LocationResult?) {
+                super.onLocationResult(p0)
+                lastLocation = p0?.lastLocation!!
+                latitude = lastLocation.latitude
+                longitude = lastLocation.longitude
+            }
+        }
+
+        createLocationRequest()
+
+        //BOTÃO EDITAR
+        val button = findViewById<Button>(R.id.editReport)
+        button.setOnClickListener {
+            val replyIntent = Intent()
+            replyIntent.putExtra(EDIT_ID, id)
+            if (TextUtils.isEmpty(editType.text)  || TextUtils.isEmpty(editDescription.text)) {
+                setResult(Activity.RESULT_CANCELED, replyIntent)
+            } else {
+                val edit_tipo = editType.text.toString()
+                replyIntent.putExtra(EDIT_TYPE, edit_tipo)
+                val edit_descricao = editDescription.text.toString()
+                replyIntent.putExtra(EDIT_DESCRIPTION, edit_descricao)
+                val latitude = latitude
+                replyIntent.putExtra(EDIT_LATITUDE, latitude)
+                val longitude = longitude
+                replyIntent.putExtra(EDIT_LONGITUDE, longitude)
+                replyIntent.putExtra(STATUS, "EDIT")
+                setResult(Activity.RESULT_OK, replyIntent)
+            }
+
+            finish()
+        }
+
+
     }
+
+    private fun createLocationRequest() {
+        locationRequest = LocationRequest()
+        locationRequest.interval = 10000
+        locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+
+    }
+    override fun onPause() {
+        super.onPause()
+        fusedLocationClient.removeLocationUpdates(locationCallback)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        startLocationUpdates()
+    }
+
+    private fun startLocationUpdates() {
+        if(ActivityCompat.checkSelfPermission(this,
+                android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+
+            ActivityCompat.requestPermissions(this,
+                arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST_CODE)
+
+            return
+        }
+        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null)
+
+    }
+    companion object {
+        const val STATUS = ""
+        const val DELETE_ID = "DELETE_ID"
+        const val EDIT_ID = "EDIT_ID"
+        const val EDIT_TYPE = "EDIT_TYPE"
+        const val EDIT_DESCRIPTION = "EDIT_DESCRIPTION"
+        const val EDIT_LATITUDE = "EDIT_LATITUDE"
+        const val EDIT_LONGITUDE = "EDIT_LONGITUDE"
+    }
+
 }
